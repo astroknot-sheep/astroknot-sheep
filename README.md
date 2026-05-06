@@ -14,15 +14,7 @@ i just like building small things that *might* help someone.
 ## what i'm fiddling with right now
 
 <details open>
-<summary><strong>🧠 KONARQ_MATRI</strong> — mental health tech that doesn't feel creepy</summary>
-<br>
-• typescript, nestjs, lots of second-guessing<br>
-• privacy-first, referral-aware, human-centered<br>
-👉 <a href="https://github.com/astroknot-sheep/KONARQ_MATRI">see the code</a>
-</details>
-
-<details>
-<summary><strong>📈 finance_transformer</strong> — can transformers read stock charts?</strong></summary>
+<summary><strong>📈 finance_transformer</strong> — can transformers read stock charts?</summary>
 <br>
 • python + pytorch playground<br>
 • adapting attention for continuous financial time-series<br>
@@ -66,8 +58,8 @@ open an issue with the answer. first one gets my eternal gratitude + a detailed 
 
 ### 💬 ask me anything
 - how do i start with RL?
-- is this mental health idea actually useful?
 - why does my transformer keep overfitting?
+- how do i structure a proper ML project from scratch?
 - what's your favorite chai spot?
 
 → just open an issue. no question is too small.  
@@ -76,7 +68,7 @@ open an issue with the answer. first one gets my eternal gratitude + a detailed 
 ### 🤝 want to collaborate?
 if you're working on:
 - ethical AI
-- accessible mental health tools
+- financial ML experiments
 - weird RL applications
 - or just want to pair-program and learn…
 
