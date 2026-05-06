@@ -1,112 +1,98 @@
-<!-- hey. thanks for stopping by. -->
+# Dhriman Deka
 
-# hi.
+Machine Learning Engineer interested in applied AI, NLP systems, reinforcement learning, and human-centered software.
 
-i'm dhriman.  
-you can call me @astroknot-sheep.  
-yes, the sheep is on purpose. 🐑
-
-i don't have a grand mission statement.  
-i just like building small things that *might* help someone.
+Most of what I build sits somewhere between research, experimentation, and production engineering.
 
 ---
 
-## what i'm fiddling with right now
+## Current Projects
 
-<details open>
-<summary><strong>🧠 KONARQ_MATRI</strong> — mental health tech that doesn't feel creepy</summary>
-<br>
-• typescript, nestjs, lots of second-guessing<br>
-• privacy-first, referral-aware, human-centered<br>
-👉 <a href="https://github.com/astroknot-sheep/KONARQ_MATRI">see the code</a>
-</details>
+### 🧠 KONARQ_MATRI
+Mental health infrastructure designed around privacy, referrals, and practical usability.
 
-<details>
-<summary><strong>📈 finance_transformer</strong> — can transformers read stock charts?</strong></summary>
-<br>
-• python + pytorch playground<br>
-• adapting attention for continuous financial time-series<br>
-• spoiler: sometimes it works. mostly it confuses noise for signal. still fun.<br>
-👉 <a href="https://github.com/astroknot-sheep/finance_transformer">see the code</a>
-</details>
+**Stack:** TypeScript, NestJS
 
-<details>
-<summary><strong>🎲 DQN for Ludo</strong> — teaching AI to play better than my cousins</summary>
-<br>
-• double dqn + prioritized replay + chai breaks<br>
-• math notes included (no jargon without explanation)<br>
-👉 <a href="https://github.com/astroknot-sheep/Reinforcement_Learning_DQN_for_Ludo">see the code</a>
-</details>
+- referral-aware architecture
+- privacy-first workflows
+- focused on reducing friction in mental health access
 
-<details>
-<summary><strong>📦 other experiments</strong></summary>
-<br>
-• <a href="https://github.com/astroknot-sheep/TWS_WriterAgent">TWS_WriterAgent</a> — playful agent prototyping<br>
-• <a href="https://github.com/astroknot-sheep/ML_project_final">ML_project_final</a> — completed learning journey<br>
-• <a href="https://github.com/astroknot-sheep/mlproject">mlproject</a> — early sandbox<br>
-• <a href="https://github.com/astroknot-sheep/data-gravity-portfolio">data-gravity-portfolio</a> — fresh sprouts 🌱
-</details>
+[Repository](https://github.com/astroknot-sheep/KONARQ_MATRI)
 
 ---
 
-## tools i use (and sometimes fight with)
+### 📈 finance_transformer
+Experiments with transformer architectures for financial time-series modeling.
 
-`python` `typescript` `pytorch` `git` `jupyter` `vs code` `chai`
+**Stack:** Python, PyTorch
 
-i'm not an expert in any of these.  
-i just keep showing up.
+Areas explored:
+- attention mechanisms for sequential market data
+- signal vs noise behavior in volatile environments
+- transformer adaptation for continuous forecasting tasks
 
----
-
-## want to interact? here's how. (no bots, no dead links)
-
-### 🎲 quick game
-guess which repo has a hidden comment that says `"you found me 🐑"`.  
-open an issue with the answer. first one gets my eternal gratitude + a detailed code review of your choice.
-
-### 💬 ask me anything
-- how do i start with RL?
-- is this mental health idea actually useful?
-- why does my transformer keep overfitting?
-- what's your favorite chai spot?
-
-→ just open an issue. no question is too small.  
-→ or start a discussion: [here](https://github.com/astroknot-sheep/astroknot-sheep/discussions)
-
-### 🤝 want to collaborate?
-if you're working on:
-- ethical AI
-- accessible mental health tools
-- weird RL applications
-- or just want to pair-program and learn…
-
-…hit me up. i reply. (usually within 48 hrs.)
+[Repository](https://github.com/astroknot-sheep/finance_transformer)
 
 ---
 
-## real talk
+### 🎲 Reinforcement Learning for Ludo
+Deep RL experiments using Double DQN and prioritized replay.
 
-i'm not trying to "disrupt" anything.  
-i'm just:
+**Stack:** Python, PyTorch
 
-- learning in public  
-- sharing half-baked ideas  
-- hoping one of them sticks and helps someone
+Includes:
+- environment design
+- training analysis
+- mathematical intuition behind implementations
 
-if that resonates —  
-→ star a repo  
-→ fork and break something  
-→ open a discussion  
-→ or just wave 👋
-
-i see you. and i appreciate you being here.
+[Repository](https://github.com/astroknot-sheep/Reinforcement_Learning_DQN_for_Ludo)
 
 ---
 
-> p.s. if you read this whole thing:  
-> you're either very curious or very bored.  
-> either way — welcome. 🫶  
->   
-> p.p.s. the sheep was definitely on purpose.
+## Other Repositories
 
-<!-- last updated: may 2026, sometime after midnight -->
+- [TWS_WriterAgent](https://github.com/astroknot-sheep/TWS_WriterAgent) — agent experimentation
+- [data-gravity-portfolio](https://github.com/astroknot-sheep/data-gravity-portfolio) — portfolio and data systems
+- [ML_project_final](https://github.com/astroknot-sheep/ML_project_final)
+- [mlproject](https://github.com/astroknot-sheep/mlproject)
+
+---
+
+## Technologies
+
+`Python` `PyTorch` `TypeScript` `Transformers` `Git` `Jupyter` `FastAPI` `NestJS`
+
+---
+
+## Interests
+
+- semantic search systems
+- generative AI applications
+- reinforcement learning
+- ethical AI tooling
+- applied ML for real-world systems
+
+---
+
+## Open to Collaboration
+
+Interested in collaborating on:
+- applied AI products
+- NLP/search infrastructure
+- mental health technology
+- reinforcement learning systems
+- research-oriented engineering projects
+
+---
+
+## Contact
+
+Feel free to open an issue or discussion on any repository if you want to discuss:
+- ML engineering
+- transformers
+- RL implementation details
+- research ideas
+- system design
+- debugging weird models at 2 AM
+
+Thanks for stopping by.
