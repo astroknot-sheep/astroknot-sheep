@@ -9,7 +9,7 @@ on:
   workflow_dispatch:        # manual trigger
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # opt into Node.js 24 now
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # silences Node.js 20 deprecation warning
 
 jobs:
   update-readme:
@@ -23,22 +23,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js 24
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Generate README
-        run: node scripts/generate-readme.js   # adjust to your actual script
+      # Rewrites the "last updated" line in README.md with today's date.
+      # If you don't have that line, this step is a no-op — safe to keep.
+      - name: Stamp last-updated date
+        run: |
+          TIMESTAMP="last updated: $(date +'%B %Y, sometime after midnight')"
+          sed -i "s|last updated:.*|${TIMESTAMP}|g" README.md
 
       - name: Commit and push if changed
         run: |
           git config --global user.name  "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add README.md
-          git diff --cached --quiet || git commit -m "chore: auto-update README [skip ci]"
+          git diff --cached --quiet && echo "Nothing to commit." && exit 0
+          git commit -m "chore: auto-stamp README date [skip ci]"
           git push
