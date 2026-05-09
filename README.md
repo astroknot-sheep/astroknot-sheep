@@ -103,4 +103,4 @@ i see you. and i appreciate you being here.
 >
 > p.p.s. the sheep was definitely on purpose.
 
-<!-- last updated: may 2026, sometime after midnight -->
+<!-- last updated: May 2026, sometime after midnight
