@@ -46,7 +46,15 @@ there are more. the actual code and discussions are linked, so you don't have to
 this is the complete upstream merge history, newest first. the timestamps come from GitHub's actual merge events, not the date the PR was closed.
 
 <!-- MERGED_HISTORY_START -->
-_this table will populate on the next dashboard refresh._
+| Merged at (UTC) | PR | Repository | Time to merge |
+|:--|:--|:--|--:|
+| 13 Nov 2026, 07:44 UTC | [fix(pgvector): cast numeric meta filters to numeric instead of integer/real](https://github.com/deepset-ai/haystack-core-integrations/pull/4149) | deepset-ai/haystack-core-integrations | 22.4 days |
+| 13 Nov 2026, 05:37 UTC | [fix(docx): close an open list before a table that follows it](https://github.com/docling-project/docling/pull/5309) | docling-project/docling | 1.2 days |
+| 12 Nov 2026, 10:19 UTC | [Don't record GeneratorExit as an error when a generator is closed early](https://github.com/pydantic/logfire/pull/2785) | pydantic/logfire | 18.8 hours |
+| 12 Nov 2026, 07:55 UTC | [fix: report per-piece line ranges for PythonCodeSplitter secondary splits](https://github.com/deepset-ai/haystack/pull/13437) | deepset-ai/haystack | 17.2 days |
+| 26 Oct 2026, 09:33 UTC | [\[examples\] Fix SentenceTransformerTrainingArguments import in paraphrase and multi-task examples](https://github.com/huggingface/sentence-transformers/pull/4246) | huggingface/sentence-transformers | 4.6 days |
+| 24 Oct 2026, 04:15 UTC | [Map Gemini safety blocks to `content_filter` in the gateway](https://github.com/mlflow/mlflow/pull/27018) | mlflow/mlflow | 1.6 days |
+| 22 Oct 2026, 06:44 UTC | [fix: default the text index tokenizer to word in grpc create_payload_index](https://github.com/qdrant/qdrant-client/pull/1617) | qdrant/qdrant-client | 8.4 hours |
 <!-- MERGED_HISTORY_END -->
 
 ### recent PRs
