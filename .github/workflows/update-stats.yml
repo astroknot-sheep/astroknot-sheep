@@ -1,4 +1,4 @@
-name: Refresh open-source profile
+name: Refresh open-source field notes
 on:
   push:
     branches: [main]
