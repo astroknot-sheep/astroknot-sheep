@@ -44,7 +44,15 @@ there are more. the actual code and discussions are linked, so you don't have to
 ### recent PRs
 
 <!-- LIVE_PRS_START -->
-_this table updates automatically._
+| Opened | Pull request | Repo | Status |
+|:--|:--|:--|:--|
+| 2026-11-13 | [fix: convert common Python types in Agent tool results to JSON](https://github.com/deepset-ai/haystack/pull/13728) | deepset-ai/haystack | open |
+| 2026-11-12 | [Support `@logfire.instrument` above `@classmethod` and `@staticmethod`](https://github.com/pydantic/logfire/pull/2807) | pydantic/logfire | open |
+| 2026-11-12 | [Report the reducer in unified TS.MRANGE/MREVRANGE metadata on RESP2 with GROUPBY](https://github.com/redis/redis-py/pull/4634) | redis/redis-py | open |
+| 2026-11-12 | [fix: pass the content type to the deserializer in LocalEndpoint.invoke](https://github.com/aws/sagemaker-python-sdk/pull/6579) | aws/sagemaker-python-sdk | open |
+| 2026-11-12 | [fix(docx): close an open list before a table that follows it](https://github.com/docling-project/docling/pull/5309) | docling-project/docling | merged |
+| 2026-11-11 | [Don't record GeneratorExit as an error when a generator is closed early](https://github.com/pydantic/logfire/pull/2785) | pydantic/logfire | merged |
+| 2026-11-03 | [fix(html): keep colspan and rowspan of merged cells in text_as_html](https://github.com/Unstructured-IO/unstructured/pull/4658) | Unstructured-IO/unstructured | open |
 <!-- LIVE_PRS_END -->
 
 [all pull requests](https://github.com/pulls?q=is%3Apr+author%3Aastroknot-sheep) · [merged upstream](https://github.com/pulls?q=is%3Apr+is%3Amerged+author%3Aastroknot-sheep) · [still open](https://github.com/pulls?q=is%3Apr+is%3Aopen+author%3Aastroknot-sheep)
