@@ -11,6 +11,36 @@ i just like building small things that *might* help someone.
 
 ---
 
+## open-source footprint
+
+some patches land. some take a few more tries. here's what i've actually sent into the wild.
+
+![Pull request totals](./assets/pr-overview.svg)
+
+![Monthly pull requests](./assets/pr-activity.svg)
+
+![Pull request activity heatmap](./assets/pr-heatmap.svg)
+
+![Repositories receiving my PRs](./assets/pr-repositories.svg)
+
+<details open><summary><strong>recent pull requests</strong></summary>
+
+![Recent PRs](./assets/pr-recent.svg)
+
+</details>
+
+[all my PRs](https://github.com/pulls?q=is%3Apr+author%3Aastroknot-sheep) · [merged PRs](https://github.com/pulls?q=is%3Apr+is%3Amerged+author%3Aastroknot-sheep) · [open PRs](https://github.com/pulls?q=is%3Apr+is%3Aopen+author%3Aastroknot-sheep)
+
+<sub>updated daily with GitHub Actions. public PRs only. merge rate counts merged PRs divided by all opened PRs.</sub>
+
+### some upstream work
+
+- [MLflow #27018](https://github.com/mlflow/mlflow/pull/27018) — Gemini safety block handling.
+- [Qdrant Client #1617](https://github.com/qdrant/qdrant-client/pull/1617) — default tokenizer parity.
+- [Sentence Transformers #4246](https://github.com/huggingface/sentence-transformers/pull/4246) — training-arguments example import.
+
+---
+
 ## what i'm fiddling with right now
 
 <details open>
