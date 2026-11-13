@@ -72,7 +72,15 @@ a running count of **upstream merges since september 2026**, not a year of mostl
 actual merge timestamps are in UTC. the last column is how long each PR spent between opening and merging.
 
 <!-- MERGED_HISTORY_START -->
-_the merged-PR record is updated by the dashboard workflow._
+| Merged at | Fix | Repository | Time to merge |
+|:--|:--|:--|--:|
+| 13 Nov 2026, 07:44 UTC | [fix(pgvector): cast numeric meta filters to numeric instead of integer/real](https://github.com/deepset-ai/haystack-core-integrations/pull/4149)<br><sub>Fix numeric casting in pgvector metadata filters.</sub> | deepset-ai/haystack-core-integrations | 22.4d |
+| 13 Nov 2026, 05:37 UTC | [fix(docx): close an open list before a table that follows it](https://github.com/docling-project/docling/pull/5309)<br><sub>Close an open list before a following table in DOCX conversion.</sub> | docling-project/docling | 1.2d |
+| 12 Nov 2026, 10:19 UTC | [Don't record GeneratorExit as an error when a generator is closed early](https://github.com/pydantic/logfire/pull/2785)<br><sub>Avoid reporting early generator closure as an error.</sub> | pydantic/logfire | 18.8h |
+| 12 Nov 2026, 07:55 UTC | [fix: report per-piece line ranges for PythonCodeSplitter secondary splits](https://github.com/deepset-ai/haystack/pull/13437)<br><sub>Correct line ranges in PythonCodeSplitter secondary splits.</sub> | deepset-ai/haystack | 17.2d |
+| 26 Oct 2026, 09:33 UTC | [\[examples\] Fix SentenceTransformerTrainingArguments import in paraphrase and multi-task examples](https://github.com/huggingface/sentence-transformers/pull/4246)<br><sub>Correct a training-arguments import in examples.</sub> | huggingface/sentence-transformers | 4.6d |
+| 24 Oct 2026, 04:15 UTC | [Map Gemini safety blocks to `content_filter` in the gateway](https://github.com/mlflow/mlflow/pull/27018)<br><sub>Handle Gemini safety blocks as content-filter events.</sub> | mlflow/mlflow | 1.6d |
+| 22 Oct 2026, 06:44 UTC | [fix: default the text index tokenizer to word in grpc create_payload_index](https://github.com/qdrant/qdrant-client/pull/1617)<br><sub>Set the gRPC text-index tokenizer's default to word.</sub> | qdrant/qdrant-client | 8.4h |
 <!-- MERGED_HISTORY_END -->
 
 ### in review
@@ -80,7 +88,15 @@ _the merged-PR record is updated by the dashboard workflow._
 open upstream PRs only. closed and merged PRs are deliberately excluded from this list.
 
 <!-- LIVE_PRS_START -->
-_the open-PR record is updated by the dashboard workflow._
+| Opened | Pull request | Repository |
+|:--|:--|:--|
+| 13 Nov 2026 | [fix: convert common Python types in Agent tool results to JSON](https://github.com/deepset-ai/haystack/pull/13728) | deepset-ai/haystack |
+| 12 Nov 2026 | [Support `@logfire.instrument` above `@classmethod` and `@staticmethod`](https://github.com/pydantic/logfire/pull/2807) | pydantic/logfire |
+| 12 Nov 2026 | [Report the reducer in unified TS.MRANGE/MREVRANGE metadata on RESP2 with GROUPBY](https://github.com/redis/redis-py/pull/4634) | redis/redis-py |
+| 12 Nov 2026 | [fix: pass the content type to the deserializer in LocalEndpoint.invoke](https://github.com/aws/sagemaker-python-sdk/pull/6579) | aws/sagemaker-python-sdk |
+| 03 Nov 2026 | [fix(html): keep colspan and rowspan of merged cells in text_as_html](https://github.com/Unstructured-IO/unstructured/pull/4658) | Unstructured-IO/unstructured |
+| 02 Nov 2026 | [Fix non-batched Dataset.filter with arrow and polars formats](https://github.com/huggingface/datasets/pull/8929) | huggingface/datasets |
+| 02 Nov 2026 | [fix(faiss): don't reuse a live faiss id when adding after a delete in FaissMapVectorStore](https://github.com/run-llama/llama_index/pull/23881) | run-llama/llama_index |
 <!-- LIVE_PRS_END -->
 
 [all authored PRs](https://github.com/pulls?q=is%3Apr+author%3Aastroknot-sheep) · [merged upstream](https://github.com/pulls?q=is%3Apr+is%3Amerged+author%3Aastroknot-sheep) · [open PRs](https://github.com/pulls?q=is%3Apr+is%3Aopen+author%3Aastroknot-sheep)
