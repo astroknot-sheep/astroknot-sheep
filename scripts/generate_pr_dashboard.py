@@ -274,6 +274,50 @@ def update_readme(prs,merged_urls):
     if new != old:
         file.write_text(new, encoding="utf-8")
 
+def update_merged_history(prs, merged_urls):
+    """List every upstream merge with its actual GitHub merge timestamp (UTC)."""
+    file = Path("README.md")
+    if not file.is_file():
+        return
+    original = file.read_text(encoding="utf-8")
+    begin, end = "<!-- MERGED_HISTORY_START -->", "<!-- MERGED_HISTORY_END -->"
+    if begin not in original or end not in original:
+        return
+    entries = []
+    for pr in prs:
+        if pr["html_url"] not in merged_urls:
+            continue
+        # Search/issues.closed_at is not a reliable merge timestamp.
+        # Fetch the pull request itself for merged_at.
+        url = pr["pull_request"]["url"]
+        headers = {"User-Agent": "astroknot-profile-svg", "Accept": "application/vnd.github+json"}
+        if TOKEN:
+            headers["Authorization"] = "Bearer " + TOKEN
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=35) as response:
+            details = json.load(response)
+        when = details.get("merged_at")
+        if not when:
+            continue
+        repository = pr["repository_url"].split("/repos/")[-1]
+        title = pr["title"].replace("|", "\\|").replace("[", "\\[").replace("]", "\\]").replace("\n", " ")
+        timestamp = dt.datetime.fromisoformat(when.replace("Z", "+00:00"))
+        entries.append((timestamp, repository, title, pr["html_url"], pr["created_at"]))
+    entries.sort(reverse=True)
+    rows = []
+    for timestamp, repository, title, url, created in entries:
+        created_time = dt.datetime.fromisoformat(created.replace("Z", "+00:00"))
+        duration = timestamp - created_time
+        days = duration.total_seconds() / 86400
+        elapsed = f"{days:.1f} days" if days >= 1 else f"{duration.total_seconds()/3600:.1f} hours"
+        rows.append(f"| {timestamp.strftime('%d %b %Y, %H:%M UTC')} | [{title}]({url}) | {repository} | {elapsed} |")
+    table = "| Merged at (UTC) | PR | Repository | Time to merge |\n|:--|:--|:--|--:|\n" + "\n".join(rows)
+    if not rows:
+        table = "_No upstream merges found._"
+    new = original.split(begin, 1)[0] + begin + "\n" + table + "\n" + end + original.split(end, 1)[1]
+    if new != original:
+        file.write_text(new, encoding="utf-8")
+
 def main():
     all_prs = list({p["html_url"]: p for p in query(f"is:pr author:{USER}")}.values())
     # Exclude PRs in personally owned repositories, so the metrics mean upstream contributions.
@@ -292,6 +336,7 @@ def main():
     atlas(prs)
     heatmap(prs, today)
     update_readme(prs, merged_urls)
+    update_merged_history(prs, merged_urls)
     print(f"Rendered field notes: {len(prs)} upstream PRs, {merged_count} merged, {open_count} open.")
 
 

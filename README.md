@@ -41,6 +41,14 @@ there are more. the actual code and discussions are linked, so you don't have to
 
 <sub>the numbers above count public PRs to repositories i don't own. PRs to my own repos aren't mixed in. data comes from GitHub and refreshes daily; this heatmap is about PRs, not commits.</sub>
 
+### merged PRs — with dates and times
+
+this is the complete upstream merge history, newest first. the timestamps come from GitHub's actual merge events, not the date the PR was closed.
+
+<!-- MERGED_HISTORY_START -->
+_this table will populate on the next dashboard refresh._
+<!-- MERGED_HISTORY_END -->
+
 ### recent PRs
 
 <!-- LIVE_PRS_START -->
