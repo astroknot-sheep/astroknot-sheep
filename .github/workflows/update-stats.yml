@@ -1,5 +1,10 @@
 name: Refresh PR dashboard
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/generate_pr_dashboard.py'
+      - '.github/workflows/update-stats.yml'
   workflow_dispatch:
   schedule:
     - cron: '17 3 * * *'
