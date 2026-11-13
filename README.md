@@ -25,7 +25,15 @@ i don't have a grand mission statement. i just like building small things that *
 the latest patches sent into the wild:
 
 <!-- PR_FEED_START -->
-_live GitHub PR log loads after the first workflow run._
+| Status | Change | Repository | Opened |
+|:---|:---|:---|:---|
+| 🟢 merged | [design: rebuild profile as Astroknot Open Source Field Notes](https://github.com/astroknot-sheep/astroknot-sheep/pull/2) | astroknot-sheep/astroknot-sheep | 2026-11-13 |
+| 🟢 merged | [feat: live pull request analytics on profile](https://github.com/astroknot-sheep/astroknot-sheep/pull/1) | astroknot-sheep/astroknot-sheep | 2026-11-13 |
+| 🟣 open | [fix: convert common Python types in Agent tool results to JSON](https://github.com/deepset-ai/haystack/pull/13728) | deepset-ai/haystack | 2026-11-13 |
+| 🟣 open | [Support `@logfire.instrument` above `@classmethod` and `@staticmethod`](https://github.com/pydantic/logfire/pull/2807) | pydantic/logfire | 2026-11-12 |
+| 🟣 open | [Report the reducer in unified TS.MRANGE/MREVRANGE metadata on RESP2 with GROUPBY](https://github.com/redis/redis-py/pull/4634) | redis/redis-py | 2026-11-12 |
+| 🟣 open | [fix: pass the content type to the deserializer in LocalEndpoint.invoke](https://github.com/aws/sagemaker-python-sdk/pull/6579) | aws/sagemaker-python-sdk | 2026-11-12 |
+| 🟢 merged | [fix(docx): close an open list before a table that follows it](https://github.com/docling-project/docling/pull/5309) | docling-project/docling | 2026-11-12 |
 <!-- PR_FEED_END -->
 
 [all PRs](https://github.com/pulls?q=is%3Apr+author%3Aastroknot-sheep) · [landed upstream](https://github.com/pulls?q=is%3Apr+is%3Amerged+author%3Aastroknot-sheep) · [still open](https://github.com/pulls?q=is%3Apr+is%3Aopen+author%3Aastroknot-sheep)
