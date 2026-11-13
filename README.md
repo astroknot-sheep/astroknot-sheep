@@ -1,16 +1,17 @@
-<!-- hi, thanks for looking around. -->
+<!-- dhriman / github profile -->
 
-<p align="center">
-  <img src="./assets/field-hero.svg" alt="Astroknot sheep, a hand-drawn orbital illustration and live upstream pull request numbers" width="100%">
-</p>
+<picture>
+  <source media="(max-width: 650px)" srcset="./assets/field-hero-mobile.svg">
+  <img src="./assets/field-hero.svg" alt="Dhriman Deka: ML engineer. Live stats for merged upstream PRs, resolved PR rate, median merge time and open PRs." width="100%">
+</picture>
 
-hi, i'm dhriman.
+hi, i’m dhriman.
 
-i studied economics at IISER Bhopal and ended up working on machine learning systems. lately i've spent a lot of time in other people's repositories. i like finding out why something broke, fixing it, and seeing whether the fix survives review.
+i studied economics at IISER Bhopal and ended up working on machine learning systems. lately i’ve spent a lot of time in other people’s repositories. i like finding out why something broke, fixing it, and seeing whether the fix survives review.
+
+**what i work on:** machine learning systems, LLM tooling, vector search, and retrieval pipelines. i’m open to ML engineering and retrieval infrastructure roles. you can [start a conversation here](https://github.com/astroknot-sheep/astroknot-sheep/discussions).
 
 and yes, the sheep in [@astroknot-sheep](https://github.com/astroknot-sheep) was deliberate. 🐑
-
-**[pull requests](https://github.com/pulls?q=is%3Apr+author%3Aastroknot-sheep)** · **[my repositories](https://github.com/astroknot-sheep?tab=repositories)** · **[discussions](https://github.com/astroknot-sheep/astroknot-sheep/discussions)**
 
 ---
 
@@ -18,67 +19,20 @@ and yes, the sheep in [@astroknot-sheep](https://github.com/astroknot-sheep) was
 
 these are the kind of contributions i enjoy: specific bugs, readable changes, and a review thread where someone makes the code better.
 
-- **[MLflow](https://github.com/mlflow/mlflow/pull/27018)** — Gemini safety blocks weren't being reported as content-filter events. fixed how the gateway handles them.
-- **[Qdrant Client](https://github.com/qdrant/qdrant-client/pull/1617)** — the default tokenizer for a gRPC text index wasn't matching the expected `word` default.
+- **[MLflow](https://github.com/mlflow/mlflow/pull/27018)** — Gemini safety blocks weren’t being reported as content-filter events. fixed how the gateway handles them.
+- **[Qdrant Client](https://github.com/qdrant/qdrant-client/pull/1617)** — the default tokenizer for a gRPC text index wasn’t matching the expected `word` default.
 - **[Haystack](https://github.com/deepset-ai/haystack/pull/13437)** — corrected line ranges when `PythonCodeSplitter` makes secondary splits.
-- **[Logfire](https://github.com/pydantic/logfire/pull/2785)** — closing a generator early shouldn't look like an application error.
+- **[Logfire](https://github.com/pydantic/logfire/pull/2785)** — closing a generator early shouldn’t look like an application error.
+- **[Docling](https://github.com/docling-project/docling/pull/5309)** — fixed document conversion when a table comes immediately after a list.
+- **[Haystack Core Integrations](https://github.com/deepset-ai/haystack-core-integrations/pull/4149)** — corrected numeric metadata filters in the pgvector integration.
 - **[Sentence Transformers](https://github.com/huggingface/sentence-transformers/pull/4246)** — fixed a broken training-arguments import in the examples.
 
-there are more. the actual code and discussions are linked, so you don't have to take my word for any of it.
+there are more. the code and reviews are linked, so you don’t have to take my word for any of it.
 
-## pull requests, over time
-
-<img src="./assets/field-pulse.svg" alt="A chart showing public upstream PRs opened and merged each month" width="100%">
-
-<details open>
-<summary><strong>where i've contributed — by repository</strong></summary>
-
-<img src="./assets/field-atlas.svg" alt="Repositories sorted by the number of PRs I've opened" width="100%">
-
-</details>
-
-<img src="./assets/field-trail.svg" alt="Days I opened PRs during the past year" width="100%">
-
-<sub>the numbers above count public PRs to repositories i don't own. PRs to my own repos aren't mixed in. data comes from GitHub and refreshes daily; this heatmap is about PRs, not commits.</sub>
-
-### merged PRs — with dates and times
-
-this is the complete upstream merge history, newest first. the timestamps come from GitHub's actual merge events, not the date the PR was closed.
-
-<!-- MERGED_HISTORY_START -->
-| Merged at (UTC) | PR | Repository | Time to merge |
-|:--|:--|:--|--:|
-| 13 Nov 2026, 07:44 UTC | [fix(pgvector): cast numeric meta filters to numeric instead of integer/real](https://github.com/deepset-ai/haystack-core-integrations/pull/4149) | deepset-ai/haystack-core-integrations | 22.4 days |
-| 13 Nov 2026, 05:37 UTC | [fix(docx): close an open list before a table that follows it](https://github.com/docling-project/docling/pull/5309) | docling-project/docling | 1.2 days |
-| 12 Nov 2026, 10:19 UTC | [Don't record GeneratorExit as an error when a generator is closed early](https://github.com/pydantic/logfire/pull/2785) | pydantic/logfire | 18.8 hours |
-| 12 Nov 2026, 07:55 UTC | [fix: report per-piece line ranges for PythonCodeSplitter secondary splits](https://github.com/deepset-ai/haystack/pull/13437) | deepset-ai/haystack | 17.2 days |
-| 26 Oct 2026, 09:33 UTC | [\[examples\] Fix SentenceTransformerTrainingArguments import in paraphrase and multi-task examples](https://github.com/huggingface/sentence-transformers/pull/4246) | huggingface/sentence-transformers | 4.6 days |
-| 24 Oct 2026, 04:15 UTC | [Map Gemini safety blocks to `content_filter` in the gateway](https://github.com/mlflow/mlflow/pull/27018) | mlflow/mlflow | 1.6 days |
-| 22 Oct 2026, 06:44 UTC | [fix: default the text index tokenizer to word in grpc create_payload_index](https://github.com/qdrant/qdrant-client/pull/1617) | qdrant/qdrant-client | 8.4 hours |
-<!-- MERGED_HISTORY_END -->
-
-### recent PRs
-
-<!-- LIVE_PRS_START -->
-| Opened | Pull request | Repo | Status |
-|:--|:--|:--|:--|
-| 2026-11-13 | [fix: convert common Python types in Agent tool results to JSON](https://github.com/deepset-ai/haystack/pull/13728) | deepset-ai/haystack | open |
-| 2026-11-12 | [Support `@logfire.instrument` above `@classmethod` and `@staticmethod`](https://github.com/pydantic/logfire/pull/2807) | pydantic/logfire | open |
-| 2026-11-12 | [Report the reducer in unified TS.MRANGE/MREVRANGE metadata on RESP2 with GROUPBY](https://github.com/redis/redis-py/pull/4634) | redis/redis-py | open |
-| 2026-11-12 | [fix: pass the content type to the deserializer in LocalEndpoint.invoke](https://github.com/aws/sagemaker-python-sdk/pull/6579) | aws/sagemaker-python-sdk | open |
-| 2026-11-12 | [fix(docx): close an open list before a table that follows it](https://github.com/docling-project/docling/pull/5309) | docling-project/docling | merged |
-| 2026-11-11 | [Don't record GeneratorExit as an error when a generator is closed early](https://github.com/pydantic/logfire/pull/2785) | pydantic/logfire | merged |
-| 2026-11-03 | [fix(html): keep colspan and rowspan of merged cells in text_as_html](https://github.com/Unstructured-IO/unstructured/pull/4658) | Unstructured-IO/unstructured | open |
-<!-- LIVE_PRS_END -->
-
-[all pull requests](https://github.com/pulls?q=is%3Apr+author%3Aastroknot-sheep) · [merged upstream](https://github.com/pulls?q=is%3Apr+is%3Amerged+author%3Aastroknot-sheep) · [still open](https://github.com/pulls?q=is%3Apr+is%3Aopen+author%3Aastroknot-sheep)
-
----
-
-## things i'm making
+## things i’m making
 
 **[KONARQ_MATRI](https://github.com/astroknot-sheep/KONARQ_MATRI)**  
-a mental-health support project. i'm thinking about privacy, referrals, and where software should step aside for a human.
+a mental-health support project. i’m thinking about privacy, referrals, and where software should step aside for a human.
 
 **[finance_transformer](https://github.com/astroknot-sheep/finance_transformer)**  
 trying transformer models on financial time series. mostly a lesson in how convincing noise can look.
@@ -96,14 +50,51 @@ double DQN, prioritized experience replay, and a game that makes the experiments
 
 </details>
 
-## the usual tools
+---
 
-Python, PyTorch, TypeScript, Git, Docker, Jupyter. depends what i'm breaking that week.
+## the PR record
+
+a running count of **upstream merges since september 2026**, not a year of mostly empty bars.
+
+<img src="./assets/field-pulse.svg" alt="Cumulative count of merged upstream PRs since September 2026" width="100%">
+
+<details>
+<summary><strong>where the PRs went — top six upstream repositories</strong></summary>
+
+<img src="./assets/field-atlas.svg" alt="Top six repositories by opened PR count, out of all upstream repositories" width="100%">
+
+</details>
+
+<sub>all numbers come from public GitHub PRs to repositories i don’t own. the hero shows the percentage of **resolved** PRs that merged; PRs still under review aren’t counted as failures. statistics and the tables below are updated daily by GitHub Actions.</sub>
+
+### merged upstream
+
+actual merge timestamps are in UTC. the last column is how long each PR spent between opening and merging.
+
+<!-- MERGED_HISTORY_START -->
+_the merged-PR record is updated by the dashboard workflow._
+<!-- MERGED_HISTORY_END -->
+
+### in review
+
+open upstream PRs only. closed and merged PRs are deliberately excluded from this list.
+
+<!-- LIVE_PRS_START -->
+_the open-PR record is updated by the dashboard workflow._
+<!-- LIVE_PRS_END -->
+
+[all authored PRs](https://github.com/pulls?q=is%3Apr+author%3Aastroknot-sheep) · [merged upstream](https://github.com/pulls?q=is%3Apr+is%3Amerged+author%3Aastroknot-sheep) · [open PRs](https://github.com/pulls?q=is%3Apr+is%3Aopen+author%3Aastroknot-sheep)
+
+---
+
+## technologies i’ve worked with
+
+**Python · PyTorch · LLM gateways · retrieval / vector search · Qdrant · MLflow · pgvector / PostgreSQL · FastAPI · Docker · Git**
+
+i’ve worked on some of these in projects and sent patches to others. links to the actual changes are above.
 
 ## say hello
 
-have a question about a PR? spotted a mistake? working on something similar?
+working on something in ML systems or retrieval, or want to talk about a PR? [start a discussion](https://github.com/astroknot-sheep/astroknot-sheep/discussions).
 
-you can [open a discussion](https://github.com/astroknot-sheep/astroknot-sheep/discussions). i don't mind questions, including beginner ones.
-
-<sub>this profile's graphs are generated in-repo with Python and GitHub Actions. [source code](./scripts/generate_pr_dashboard.py).</sub>
+<sub>the graphics are generated in this repository with Python and GitHub Actions. [source code](./scripts/generate_pr_dashboard.py).</sub>
