@@ -274,94 +274,116 @@ def heatmap(prs,today):
     for i,c in enumerate(palette):s+=rect(875+i*17,226,11,11,c,2)
     save("field-trail.svg",w,h,s,"Daily pull request creation heatmap, last year")
 
-def update_readme(prs,merged_urls):
-    """Maintain the existing human-written README; only refresh the marked PR table."""
-    file = Path("README.md")
-    if not file.is_file():
-        return
-    old = file.read_text(encoding="utf-8")
-    begin, end = "<!-- LIVE_PRS_START -->", "<!-- LIVE_PRS_END -->"
-    if begin not in old or end not in old:
-        return
-    rows = []
-    for pr in prs[:7]:
-        url = pr["html_url"]
-        repo = pr["repository_url"].split("/repos/")[-1]
-        title = pr["title"].replace("|", "\\|").replace("[", "\\[").replace("]", "\\]").replace("\n", " ")
-        status = "merged" if url in merged_urls else ("open" if pr["state"] == "open" else "closed")
-        rows.append(f"| {pr['created_at'][:10]} | [{title}]({url}) | {repo} | {status} |")
-    content = "| Opened | Pull request | Repo | Status |\n|:--|:--|:--|:--|\n" + "\n".join(rows)
-    if not rows:
-        content = "_No public upstream PRs found._"
-    new = old.split(begin, 1)[0] + begin + "\n" + content + "\n" + end + old.split(end, 1)[1]
-    if new != old:
-        file.write_text(new, encoding="utf-8")
+def update_readme(prs):
+    """Keep the prose intact; list only open upstream PRs in consistent dates."""
+    file=Path("README.md")
+    if not file.exists():return
+    original=file.read_text(encoding="utf-8")
+    begin,end="<!-- LIVE_PRS_START -->","<!-- LIVE_PRS_END -->"
+    if begin not in original or end not in original:return
+    rows=[]
+    for pr in [p for p in prs if p["state"]=="open"][:7]:
+        url=pr["html_url"]
+        repo=pr["repository_url"].split("/repos/")[-1]
+        title=pr["title"].replace("|","\\|").replace("[","\\[").replace("]","\\]").replace("\n"," ")
+        date=dt.date.fromisoformat(pr["created_at"][:10]).strftime("%d %b %Y")
+        rows.append(f"| {date} | [{title}]({url}) | {repo} |")
+    table="| Opened | Pull request | Repository |\n|:--|:--|:--|\n"+"\n".join(rows) if rows else "_No PRs currently open._"
+    new=original.split(begin,1)[0]+begin+"\n"+table+"\n"+end+original.split(end,1)[1]
+    if new!=original:file.write_text(new,encoding="utf-8")
 
-def update_merged_history(prs, merged_urls):
-    """List every upstream merge with its actual GitHub merge timestamp (UTC)."""
-    file = Path("README.md")
-    if not file.is_file():
-        return
-    original = file.read_text(encoding="utf-8")
-    begin, end = "<!-- MERGED_HISTORY_START -->", "<!-- MERGED_HISTORY_END -->"
-    if begin not in original or end not in original:
-        return
-    entries = []
+# One-line descriptions grounded in the actual merged fixes.
+PR_SUMMARIES={
+    "qdrant/qdrant-client": "Set the gRPC text-index tokenizer's default to word.",
+    "mlflow/mlflow": "Handle Gemini safety blocks as content-filter events.",
+    "deepset-ai/haystack": "Correct line ranges in PythonCodeSplitter secondary splits.",
+    "deepset-ai/haystack-core-integrations": "Fix numeric casting in pgvector metadata filters.",
+    "docling-project/docling": "Close an open list before a following table in DOCX conversion.",
+    "pydantic/logfire": "Avoid reporting early generator closure as an error.",
+    "huggingface/sentence-transformers": "Correct a training-arguments import in examples.",
+}
+
+def update_merged_history(prs, merge_info):
+    """Render merged upstream PRs with exact GitHub timestamps, review times, and context."""
+    file=Path("README.md")
+    if not file.exists():return
+    original=file.read_text(encoding="utf-8")
+    begin,end="<!-- MERGED_HISTORY_START -->","<!-- MERGED_HISTORY_END -->"
+    if begin not in original or end not in original:return
+    entries=[]
     for pr in prs:
-        if pr["html_url"] not in merged_urls:
-            continue
-        # Search/issues.closed_at is not a reliable merge timestamp.
-        # Fetch the pull request itself for merged_at.
-        url = pr["pull_request"]["url"]
-        headers = {"User-Agent": "astroknot-profile-svg", "Accept": "application/vnd.github+json"}
-        if TOKEN:
-            headers["Authorization"] = "Bearer " + TOKEN
-        req = urllib.request.Request(url, headers=headers)
-        with urllib.request.urlopen(req, timeout=35) as response:
-            details = json.load(response)
-        when = details.get("merged_at")
-        if not when:
-            continue
-        repository = pr["repository_url"].split("/repos/")[-1]
-        title = pr["title"].replace("|", "\\|").replace("[", "\\[").replace("]", "\\]").replace("\n", " ")
-        timestamp = dt.datetime.fromisoformat(when.replace("Z", "+00:00"))
-        entries.append((timestamp, repository, title, pr["html_url"], pr["created_at"]))
-    entries.sort(reverse=True)
-    rows = []
-    for timestamp, repository, title, url, created in entries:
-        created_time = dt.datetime.fromisoformat(created.replace("Z", "+00:00"))
-        duration = timestamp - created_time
-        days = duration.total_seconds() / 86400
-        elapsed = f"{days:.1f} days" if days >= 1 else f"{duration.total_seconds()/3600:.1f} hours"
-        rows.append(f"| {timestamp.strftime('%d %b %Y, %H:%M UTC')} | [{title}]({url}) | {repository} | {elapsed} |")
-    table = "| Merged at (UTC) | PR | Repository | Time to merge |\n|:--|:--|:--|--:|\n" + "\n".join(rows)
-    if not rows:
-        table = "_No upstream merges found._"
-    new = original.split(begin, 1)[0] + begin + "\n" + table + "\n" + end + original.split(end, 1)[1]
-    if new != original:
-        file.write_text(new, encoding="utf-8")
+        details=merge_info.get(pr["html_url"])
+        if not details:continue
+        timestamp=dt.datetime.fromisoformat(details["merged_at"].replace("Z","+00:00"))
+        created=dt.datetime.fromisoformat(pr["created_at"].replace("Z","+00:00"))
+        elapsed=(timestamp-created).total_seconds()/86400
+        repo=pr["repository_url"].split("/repos/")[-1]
+        title=pr["title"].replace("|","\\|").replace("[","\\[").replace("]","\\]").replace("\n"," ")
+        entries.append((timestamp,elapsed,repo,title,pr["html_url"]))
+    entries.sort(key=lambda item:item[0],reverse=True)
+    rows=[]
+    for timestamp,days,repo,title,url in entries:
+        human=f"{days:.1f}d" if days>=1 else f"{days*24:.1f}h"
+        blurb=PR_SUMMARIES.get(repo, "A bugfix merged by upstream maintainers.")
+        rows.append(f"| {timestamp.strftime('%d %b %Y, %H:%M UTC')} | [{title}]({url})<br><sub>{blurb}</sub> | {repo} | {human} |")
+    table="| Merged at | Fix | Repository | Time to merge |\n|:--|:--|:--|--:|\n"+"\n".join(rows)
+    if not rows:table="_No upstream merges found._"
+    new=original.split(begin,1)[0]+begin+"\n"+table+"\n"+end+original.split(end,1)[1]
+    if new!=original:file.write_text(new,encoding="utf-8")
+
+def hero_mobile(merged,open_n,resolved_rate,median_days,stamp):
+    """A 2-column companion to the desktop SVG for narrow screens."""
+    w,h=640,620
+    s=rect(0,0,w,h,INK)
+    s+=text(34,45,"DHRIMAN DEKA / ML ENGINEER",16,LIME,700,MONO)
+    s+=text(34,75,"LLM + RETRIEVAL SYSTEMS",15,MUTED,500,MONO)
+    s+=text(31,185,"found a bug.",76,PAPER,750,FONTS,'letter-spacing="-4"')
+    s+=text(31,274,"sent a patch.",76,LAV,750,FONTS,'letter-spacing="-4"')
+    s+=text(34,316,"fixing the rough edges of ML systems.",19,MUTED,400,FONTS)
+    s+=line(34,343,606,343,"#3D4551")
+    pairs=[
+        (34,409,str(merged),["MERGED","UPSTREAM"],PAPER),
+        (330,409,f"{resolved_rate:.0%}",["RESOLVED PRs","MERGED"],LIME),
+        (34,515,f"{median_days:.1f}d",["MEDIAN TIME","TO MERGE"],LAV),
+        (330,515,str(open_n),["OPEN PRs","IN REVIEW"],CORAL)
+    ]
+    for x,y,value,labels,color in pairs:
+        s+=text(x,y,value,48,color,700,FONTS)
+        s+=text(x,y+24,labels[0],13,MUTED,500,MONO)
+        s+=text(x,y+41,labels[1],13,MUTED,500,MONO)
+    s+=line(34,568,606,568,"#3D4551")
+    s+=text(34,594,f"PUBLIC GITHUB DATA · {stamp}",12,MUTED,400,MONO)
+    save("field-hero-mobile.svg",w,h,s,"Dhriman Deka: public merged pull requests, resolved rate and median merge time")
 
 def main():
-    all_prs = list({p["html_url"]: p for p in query(f"is:pr author:{USER}")}.values())
-    # Exclude PRs in personally owned repositories, so the metrics mean upstream contributions.
-    def is_upstream(pr):
-        owner = pr["repository_url"].split("/repos/")[-1].split("/")[0]
-        return owner.lower() != USER.lower()
-    prs = [p for p in all_prs if is_upstream(p)]
-    prs.sort(key=lambda p: p["created_at"], reverse=True)
-    merged_urls = {p["html_url"] for p in query(f"is:pr is:merged author:{USER}")}
-    merged_count = sum(p["html_url"] in merged_urls for p in prs)
-    open_count = sum(p["state"] == "open" for p in prs)
-    rate = merged_count / len(prs) if prs else 0
-    today = dt.datetime.now(dt.timezone.utc).date()
-    hero(len(prs), merged_count, open_count, rate, today.isoformat())
-    pulse(prs, merged_urls, rate, today)
+    all_prs=list({p["html_url"]:p for p in query(f"is:pr author:{USER}")}.values())
+    def upstream(pr):
+        owner=pr["repository_url"].split("/repos/")[-1].split("/")[0]
+        return owner.lower()!=USER.lower()
+    prs=[p for p in all_prs if upstream(p)]
+    prs.sort(key=lambda p:p["created_at"],reverse=True)
+    merged_urls={p["html_url"] for p in query(f"is:pr is:merged author:{USER}")}
+    merge_info=fetch_merged_details(prs,merged_urls)
+    merged_count=len(merge_info)
+    open_count=sum(p["state"]=="open" for p in prs)
+    resolved_count=len(prs)-open_count
+    resolved_rate=merged_count/resolved_count if resolved_count else 0
+    times=[]
+    for pr in prs:
+        d=merge_info.get(pr["html_url"])
+        if not d:continue
+        merge_time=dt.datetime.fromisoformat(d["merged_at"].replace("Z","+00:00"))
+        opened=dt.datetime.fromisoformat(pr["created_at"].replace("Z","+00:00"))
+        times.append((merge_time-opened).total_seconds()/86400)
+    median_days=median(times)
+    today=dt.datetime.now(dt.timezone.utc).date()
+    hero(len(prs),merged_count,open_count,resolved_rate,median_days,today.isoformat())
+    hero_mobile(merged_count,open_count,resolved_rate,median_days,today.isoformat())
+    pulse(prs,merge_info,resolved_rate,today)
     atlas(prs)
-    heatmap(prs, today)
-    update_readme(prs, merged_urls)
-    update_merged_history(prs, merged_urls)
-    print(f"Rendered field notes: {len(prs)} upstream PRs, {merged_count} merged, {open_count} open.")
-
+    update_readme(prs)
+    update_merged_history(prs,merge_info)
+    print(f"Upstream PRs: {len(prs)}, merged: {merged_count}, open: {open_count}, resolved merge rate: {resolved_rate:.1%}, median: {median_days:.1f}d")
 
 if __name__=="__main__":
     main()
