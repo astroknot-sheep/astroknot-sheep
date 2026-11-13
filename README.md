@@ -1,43 +1,42 @@
 <!-- hey. thanks for stopping by. -->
 
-# hi.
+<p align="center">
+<img src="./assets/field-hero.svg" width="100%" alt="Astroknot Sheep / Open Source Field Notes">
+</p>
 
-i'm dhriman.  
-you can call me @astroknot-sheep.  
+i'm dhriman. call me **[@astroknot-sheep](https://github.com/astroknot-sheep)**.  
 yes, the sheep is on purpose. 🐑
 
-i don't have a grand mission statement.  
-i just like building small things that *might* help someone.
+i don't have a grand mission statement. i just like building small things that *might* help someone.
 
----
+### 01 / the pulse
+![Monthly PRs and merge rate](./assets/field-pulse.svg)
 
-## open-source footprint
+### 02 / the constellation
+![Repositories receiving my pull requests](./assets/field-atlas.svg)
 
-some patches land. some take a few more tries. here's what i've actually sent into the wild.
+### 03 / the trail
+![PR creation heatmap](./assets/field-trail.svg)
 
-![Pull request totals](./assets/pr-overview.svg)
+<sub>real public PRs, refreshed daily. merge ratio = merged PRs / total opened PRs. this heatmap counts PR openings, not commits.</sub>
 
-![Monthly pull requests](./assets/pr-activity.svg)
+### 04 / dispatch log
 
-![Pull request activity heatmap](./assets/pr-heatmap.svg)
+the latest patches sent into the wild:
 
-![Repositories receiving my PRs](./assets/pr-repositories.svg)
+<!-- PR_FEED_START -->
+_live GitHub PR log loads after the first workflow run._
+<!-- PR_FEED_END -->
 
-<details open><summary><strong>recent pull requests</strong></summary>
+[all PRs](https://github.com/pulls?q=is%3Apr+author%3Aastroknot-sheep) · [landed upstream](https://github.com/pulls?q=is%3Apr+is%3Amerged+author%3Aastroknot-sheep) · [still open](https://github.com/pulls?q=is%3Apr+is%3Aopen+author%3Aastroknot-sheep)
 
-![Recent PRs](./assets/pr-recent.svg)
+<details><summary><strong>some upstream patches i'm happy about</strong></summary>
+
+- [MLflow #27018](https://github.com/mlflow/mlflow/pull/27018) — Gemini safety block handling
+- [Qdrant Client #1617](https://github.com/qdrant/qdrant-client/pull/1617) — default tokenizer parity
+- [Sentence Transformers #4246](https://github.com/huggingface/sentence-transformers/pull/4246) — import fix in examples
 
 </details>
-
-[all my PRs](https://github.com/pulls?q=is%3Apr+author%3Aastroknot-sheep) · [merged PRs](https://github.com/pulls?q=is%3Apr+is%3Amerged+author%3Aastroknot-sheep) · [open PRs](https://github.com/pulls?q=is%3Apr+is%3Aopen+author%3Aastroknot-sheep)
-
-<sub>updated daily with GitHub Actions. public PRs only. merge rate counts merged PRs divided by all opened PRs.</sub>
-
-### some upstream work
-
-- [MLflow #27018](https://github.com/mlflow/mlflow/pull/27018) — Gemini safety block handling.
-- [Qdrant Client #1617](https://github.com/qdrant/qdrant-client/pull/1617) — default tokenizer parity.
-- [Sentence Transformers #4246](https://github.com/huggingface/sentence-transformers/pull/4246) — training-arguments example import.
 
 ---
 
@@ -145,4 +144,4 @@ i see you. and i appreciate you being here.
 >   
 > p.p.s. the sheep was definitely on purpose.
 
-<!-- last updated: may 2026, sometime after midnight -->
+<!-- Open source stats are refreshed by GitHub Actions -->
