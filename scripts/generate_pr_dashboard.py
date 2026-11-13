@@ -1,293 +1,198 @@
 #!/usr/bin/env python3
-"""Astroknot / Open Source Field Notes: self-contained, live GitHub SVG artwork.
-No pip dependencies, third-party image hosts, external fonts, or fake counters.
+"""Print-inspired GitHub profile graphics using verified public PR data.
+Python standard library only. Figures are generated in-repo, with no external widgets.
 """
 import collections
 import datetime as dt
 import json
-import math
 import os
-from pathlib import Path
-import re
-import urllib.parse
-import urllib.request
 from html import escape
+from pathlib import Path
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
 
-USER = os.environ.get("GH_USERNAME", "astroknot-sheep")
-TOKEN = os.environ.get("GH_TOKEN", "")
-DIR = Path("assets")
-DIR.mkdir(exist_ok=True)
+USER = os.getenv("GH_USERNAME", "astroknot-sheep")
+TOKEN = os.getenv("GH_TOKEN", "")
+OUTPUT = Path("assets")
+OUTPUT.mkdir(exist_ok=True)
 
-INK = "#080D14"
-PANEL = "#101824"
-LINE = "#293246"
-PAPER = "#F0F3EC"
-MUTED = "#8D9AAB"
-LIME = "#D5FC70"
-LAV = "#A89BFF"
-CORAL = "#FFB09D"
-BLUE = "#85BFF9"
-FONTS = "Inter,Segoe UI,Arial,sans-serif"
-MONO = "SFMono-Regular,Consolas,DejaVu Sans Mono,monospace"
+# A restrained print palette: uncoated paper, ink, one signal colour.
+PAPER = "#F7F4EE"
+INK = "#1E2425"
+QUIET = "#677174"
+HAIR = "#D8D5CD"
+ACCENT = "#C44A31"
+FAINT = "#E9E3D9"
+SOFT_RED = "#F2D7CE"
+SANS = "Arial,Helvetica,sans-serif"
+SERIF = "Georgia,Times New Roman,serif"
+MONO = "Consolas,Liberation Mono,monospace"
 
-def query(q):
-    items = []
+def fetch(search):
+    results = []
     for page in range(1, 11):
-        qs = urllib.parse.urlencode({"q": q, "per_page": 100, "page": page})
-        headers = {"User-Agent": "astroknot-profile-svg", "Accept": "application/vnd.github+json"}
+        url = "https://api.github.com/search/issues?" + urlencode({"q": search, "per_page": 100, "page": page})
+        headers = {"Accept": "application/vnd.github+json", "User-Agent": "astroknot-profile"}
         if TOKEN:
             headers["Authorization"] = "Bearer " + TOKEN
-        req = urllib.request.Request("https://api.github.com/search/issues?" + qs, headers=headers)
-        with urllib.request.urlopen(req, timeout=35) as response:
-            data = json.load(response)
-        batch = data.get("items", [])
-        items.extend(batch)
+        with urlopen(Request(url, headers=headers), timeout=40) as response:
+            payload = json.load(response)
+        batch = payload.get("items", [])
+        results.extend(batch)
         if len(batch) < 100:
             break
-    return items
+    return results
 
-def e(s):
-    return escape(str(s), quote=True)
+def t(x,y,content,size=16,color=INK,weight=400,font=SANS,other=""):
+    return f'<text x="{x}" y="{y}" font-family="{font}" font-size="{size}" font-weight="{weight}" fill="{color}" {other}>{escape(str(content))}</text>'
 
-def text(x, y, s, size=16, color=PAPER, weight=400, family=FONTS, extra=""):
-    return f'<text x="{x}" y="{y}" fill="{color}" font-family="{family}" font-size="{size}" font-weight="{weight}" {extra}>{e(s)}</text>'
+def r(x,y,w,h,color,rad=0):
+    return f'<rect x="{x}" y="{y}" width="{max(0,w)}" height="{max(0,h)}" rx="{rad}" fill="{color}"/>'
 
-def rect(x, y, w, h, color, rx=0, extra=""):
-    return f'<rect x="{x}" y="{y}" width="{max(0,w)}" height="{max(0,h)}" rx="{rx}" fill="{color}" {extra}/>'
+def l(x1,y1,x2,y2,color=HAIR,width=1):
+    return f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{color}" stroke-width="{width}"/>'
 
-def line(x1,y1,x2,y2,color=LINE,width=1,extra=""):
-    return f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{color}" stroke-width="{width}" {extra}/>'
+def svg(name,width,height,contents,alt):
+    xml = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="{width}" height="{height}" role="img" aria-label="{escape(alt,quote=True)}"><title>{escape(alt)}</title>'
+    xml += r(0,0,width,height,PAPER,3) + contents + "</svg>\n"
+    (OUTPUT / name).write_text(xml, encoding="utf-8")
 
-def circle(x,y,r,fill="none",stroke="none",sw=1,extra=""):
-    return f'<circle cx="{x}" cy="{y}" r="{r}" fill="{fill}" stroke="{stroke}" stroke-width="{sw}" {extra}/>'
+def label(x,y,value,colour=QUIET):
+    return t(x,y,value,13,colour,700,MONO, 'letter-spacing=".6"')
 
-def group(s, transform):
-    return f'<g transform="{transform}">{s}</g>'
+def poster(upstream,merged,repo_count):
+    w,h=1100,385
+    s=l(40,40,1060,40,INK,2)
+    s+=t(42,27,"DHRIMAN DEKA",16,INK,700,MONO,'letter-spacing="1.2"')
+    s+=t(1058,27,"GITHUB / ASTROKNOT-SHEEP",13,QUIET,600,MONO,'text-anchor="end"')
+    s+=t(38,193,"dhriman.",142,INK,400,SERIF,'font-style="italic" letter-spacing="-8"')
+    s+=r(43,215,328,10,ACCENT)
+    s+=t(43,260,"engineer by practice, curious by default.",19,INK,400,SANS)
+    s+=t(43,286,"economics → machine learning → open source",16,QUIET,400,SANS)
+    s+=l(40,314,1060,314,INK,2)
+    # An index, not a stack of rounded cards.
+    stats=[(44,str(upstream),"UPSTREAM PRs"),(416,str(merged),"MERGED"),(788,str(repo_count),"PROJECTS TOUCHED")]
+    for i,(x,value,name) in enumerate(stats):
+        s+=t(x,362,value,42,ACCENT if i==1 else INK,700,SANS,'letter-spacing="-1.5"')
+        s+=t(x+80,356,name,14,QUIET,700,MONO)
+    s+=l(390,327,390,374);s+=l(765,327,765,374)
+    svg("profile-poster.svg",w,h,s,"Dhriman Deka, ML engineer and open-source contributor. Live upstream PR totals.")
 
-def base(w,h,body,title):
-    defs = """<defs>
-      <linearGradient id="heroGlow" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#202038"/><stop offset=".55" stop-color="#111d29"/><stop offset="1" stop-color="#080d14"/>
-      </linearGradient>
-      <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0" stop-color="#A89BFF"/><stop offset="1" stop-color="#D5FC70"/>
-      </linearGradient>
-      <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#A89BFF" stop-opacity=".28"/>
-        <stop offset="1" stop-color="#A89BFF" stop-opacity="0"/>
-      </linearGradient>
-      <radialGradient id="orbGlow"><stop offset="0" stop-color="#A89BFF" stop-opacity=".2"/>
-        <stop offset="1" stop-color="#A89BFF" stop-opacity="0"/></radialGradient>
-      <pattern id="microGrid" width="32" height="32" patternUnits="userSpaceOnUse">
-        <path d="M32 0H0V32" fill="none" stroke="#202838" stroke-width=".55"/>
-      </pattern>
-      </defs>"""
-    header = f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img" aria-label="{e(title)}"><title>{e(title)}</title>'
-    return header + defs + rect(0,0,w,h,INK,16) + body + '</svg>\n'
+def overview(prs,merged_urls,now):
+    opened=collections.Counter(p["created_at"][:7] for p in prs)
+    landed=collections.Counter(p["closed_at"][:7] for p in prs if p["html_url"] in merged_urls and p.get("closed_at"))
+    months=[]
+    for delta in range(11,-1,-1):
+        absolute=now.year*12+now.month-1-delta
+        yr,mo=divmod(absolute,12)
+        months.append(f"{yr:04d}-{mo+1:02d}")
+    peak=max(1,*[max(opened[m],landed[m]) for m in months])
+    w,h=1100,350
+    s=label(42,36,"01 / UPSTREAM PULL REQUESTS") + t(1058,36,"LAST 12 MONTHS",13,QUIET,600,MONO,'text-anchor="end"')
+    s+=l(42,50,1058,50,INK,1.5)
+    s+=t(42,95,"Opened and merged, month by month",27,INK,400,SERIF)
+    s+=r(744,74,13,13,INK)+t(765,86,"opened",14,QUIET)
+    s+=r(872,74,13,13,ACCENT)+t(893,86,"merged",14,QUIET)
+    left=56;right=1055;chart_top=132;chart_bottom=277
+    for i in range(5):
+        y=chart_bottom-i*(chart_bottom-chart_top)/4
+        s+=l(left,y,right,y,HAIR)
+        s+=t(45,y-6,round(peak*i/4),12,QUIET,400,MONO,'text-anchor="end"')
+    full=right-left;slot=full/12
+    for i,month in enumerate(months):
+        x=left+i*slot+slot*.13
+        bar_width=slot*.27
+        op=opened[month];mg=landed[month]
+        h1=op/peak*(chart_bottom-chart_top)
+        h2=mg/peak*(chart_bottom-chart_top)
+        s+=r(round(x,1),round(chart_bottom-h1,1),round(bar_width,1),round(h1,1),INK,1)
+        s+=r(round(x+bar_width+5,1),round(chart_bottom-h2,1),round(bar_width,1),round(h2,1),ACCENT,1)
+        s+=t(round(left+i*slot+slot*.44,1),308,month[5:],14,QUIET,500,MONO,'text-anchor="middle"')
+    s+=l(42,325,1058,325)
+    s+=t(42,342,"Counts are based on PR creation dates and merge dates, respectively.",12,QUIET)
+    svg("pr-months.svg",w,h,s,"Upstream pull requests opened and merged per month over the last year")
 
-def save(filename,w,h,body,title):
-    (DIR / filename).write_text(base(w,h,body,title), encoding="utf-8")
-
-def eyebrow(index, label, w=1000):
-    s = text(50,43,f"{index} / {label.upper()}",12,LIME,600,MONO)
-    s += text(w-50,43,"ASTROKNOT—SHEEP / OSS ARCHIVE",11,MUTED,400,MONO,'text-anchor="end"')
-    return s + line(50,59,w-50,59)
-
-def hero(n,merged,open_n,rate,stamp):
-    w,h=1000,410
-    s=rect(0,0,w,h,"url(#heroGlow)",16) + rect(0,0,w,h,"url(#microGrid)",16, 'opacity=".33"')
-    s+=circle(805,176,180,"url(#orbGlow)")
-    s+=text(52,48,"ASTROKNOT / SHEEP",14,LIME,700,MONO, 'letter-spacing="2"')
-    s+=text(951,48,"ISSUE 001   •   THE INTERNET",12,MUTED,400,MONO,'text-anchor="end"')
-    s+=line(52,66,948,66,"#435064")
-    s+=text(49,152,"small patches.",67,PAPER,700,FONTS,'letter-spacing="-3"')
-    s+=text(48,226,"large ripples.",70,LAV,700,FONTS,'letter-spacing="-3"')
-    s+=text(53,264,"learning in public / one upstream fix at a time",15,MUTED,400,MONO)
-    # Render a geometric sheep head as an orbiting constellation, no emoji font dependency.
-    cx,cy=808,190
-    for r in [84,118,149]:
-        s+=circle(cx,cy,r,"none","#566279",1,'stroke-dasharray="3 10" opacity=".65"')
-    s+=f'<ellipse cx="{cx}" cy="{cy}" rx="176" ry="69" fill="none" stroke="{LAV}" stroke-width="1.2" transform="rotate(-28 {cx} {cy})" opacity=".85"/>'
-    for x,y,r,c in [(681,145,4,LIME),(919,122,3,PAPER),(862,330,4,LAV),(965,218,3,LIME),(728,246,2,PAPER)]:
-        s+=circle(x,y,r,c)
-    # Distinctive minimal line-drawn sheep: looping wool, face, ears, eyes.
-    cloud="M763 168 C738 145 756 116 785 128 C797 106 833 109 843 133 C872 121 889 143 880 165 C898 183 885 211 861 214 C852 236 819 245 804 225 C780 238 756 220 756 202 C739 192 742 179 763 168Z"
-    s+=f'<path d="{cloud}" fill="#172131" stroke="{PAPER}" stroke-width="2.5" stroke-linejoin="round"/>'
-    s+=f'<path d="M789 181 Q808 167 830 180 L832 217 Q814 237 791 215 Z" fill="#253044" stroke="{PAPER}" stroke-width="2"/>'
-    s+=f'<path d="M789 187 L766 177 Q766 199 789 200 M832 187 L857 176 Q857 199 832 200" fill="#253044" stroke="{PAPER}" stroke-width="2"/>'
-    s+=circle(802,198,3,LIME)+circle(820,198,3,LIME)
-    s+=f'<path d="M807 212 Q813 217 818 212" fill="none" stroke="{PAPER}" stroke-width="2" stroke-linecap="round"/>'
-    s+=text(810,354,"NODE 01: curious sheep",11,MUTED,400,MONO,'text-anchor="middle"')
-    s+=line(52,295,948,295,"#435064")
-    for i,(value,label,col) in enumerate([(f"{n:02}","PULL REQUESTS",PAPER),(f"{merged:02}","MERGED UPSTREAM",LIME),(f"{open_n:02}","IN REVIEW",LAV),(f"{rate:.0%}","MERGE RATIO",CORAL)]):
-        x=54+i*229
-        s+=text(x,342,value,37,col,700,MONO)+text(x,367,label,10,MUTED,600,MONO,'letter-spacing=".7"')
-        if i<3:s+=line(x+209,313,x+209,372,"#435064")
-    s+=text(949,397,f"LIVE DATA · {stamp}",10,MUTED,400,MONO,'text-anchor="end"')
-    save("field-hero.svg",w,h,s,"Astroknot Open Source Field Notes: real pull request totals")
-
-def smooth_path(points):
-    if not points:return ""
-    result=f"M {points[0][0]:.2f} {points[0][1]:.2f}"
-    for a,b in zip(points,points[1:]):
-        midpoint=(b[0]-a[0])/2
-        result+=f" C {a[0]+midpoint:.2f} {a[1]:.2f}, {b[0]-midpoint:.2f} {b[1]:.2f}, {b[0]:.2f} {b[1]:.2f}"
-    return result
-
-def months_back(today):
-    out=[]
-    for j in range(11,-1,-1):
-        ordinal=today.year*12+today.month-1-j
-        year,month=divmod(ordinal,12)
-        out.append(f"{year:04d}-{month+1:02d}")
-    return out
-
-def pulse(prs,merged_set,rate,today):
-    w,h=1000,425
-    s=eyebrow("01","the pulse")
-    s+=text(50,111,"The work has a pulse.",31,PAPER,700,FONTS,'letter-spacing="-1"')
-    s+=text(50,137,"PRs opened vs. PRs merged / last twelve months",13,MUTED,400,MONO)
-    s+=text(49,164,"●",13,LAV)+text(67,164,"SUBMITTED",11,MUTED,600,MONO)
-    s+=text(182,164,"●",13,LIME)+text(200,164,"LANDED",11,MUTED,600,MONO)
-    dates=months_back(today)
-    a=collections.Counter(p["created_at"][:7] for p in prs)
-    b=collections.Counter(p.get("closed_at","")[:7] for p in prs if p["html_url"] in merged_set and p.get("closed_at"))
-    peak=max(1,*[max(a[d],b[d]) for d in dates])
-    # Left timeline occupies 650 px; right circular score.
-    left,right,top,bottom=55,672,196,351
-    for j in range(5):
-        y=bottom-j*(bottom-top)/4
-        value=round(peak*j/4)
-        s+=line(left,y,right,y,"#283247",1,'stroke-dasharray="2 6"')
-        s+=text(left-5,y-6,value,10,MUTED,400,MONO)
-    pointsA=[];pointsB=[]
-    for i,d in enumerate(dates):
-        x=left+18+i*(right-left-36)/11
-        ya=bottom-a[d]/peak*(bottom-top)
-        yb=bottom-b[d]/peak*(bottom-top)
-        pointsA.append((x,ya));pointsB.append((x,yb))
-        s+=text(x,bottom+25,d[5:],11,MUTED,400,MONO,'text-anchor="middle"')
-    pA=smooth_path(pointsA);pB=smooth_path(pointsB)
-    s+=f'<path d="{pA} L{pointsA[-1][0]} {bottom} L{pointsA[0][0]} {bottom}Z" fill="url(#areaGrad)"/>'
-    s+=f'<path d="{pA}" fill="none" stroke="{LAV}" stroke-width="3.5" stroke-linejoin="round"/>'
-    s+=f'<path d="{pB}" fill="none" stroke="{LIME}" stroke-width="3.5" stroke-linejoin="round"/>'
-    for x,y in pointsA:s+=circle(round(x,2),round(y,2),3.6,LAV,INK,1.5)
-    for x,y in pointsB:s+=circle(round(x,2),round(y,2),3.6,LIME,INK,1.5)
-    # Donut gauge with oversized type.
-    cx,cy,r=833,269,76
-    s+=circle(cx,cy,r,"none","#2C3448",15)
-    C=2*math.pi*r
-    s+=circle(cx,cy,r,"none",LIME,15,f'stroke-dasharray="{C*rate:.2f} {C:.2f}" stroke-linecap="round" transform="rotate(-90 {cx} {cy})"')
-    s+=text(cx,cy+8,f"{rate:.0%}",41,PAPER,700,MONO,'text-anchor="middle"')
-    s+=text(cx,cy+31,"MERGED / ALL",10,MUTED,500,MONO,'text-anchor="middle"')
-    s+=text(833,382,"NOT A LEADERBOARD. A LOGBOOK.",10,MUTED,500,MONO,'text-anchor="middle"')
-    s+=line(50,402,950,402)
-    save("field-pulse.svg",w,h,s,"Twelve months of opened and merged pull requests")
-
-def atlas(prs):
-    w,h=1000,410
-    s=eyebrow("02","the constellation")
-    s+=text(50,111,"Patches, across the ecosystem.",31,PAPER,700,FONTS,'letter-spacing="-1"')
-    s+=text(50,137,"Each orbiting node is a repository I've sent PRs to.",13,MUTED,400,MONO)
-    repos=collections.Counter(p["repository_url"].split("/repos/")[-1] for p in prs)
-    top=repos.most_common(7);maxn=max((n for _,n in top),default=1)
-    cx,cy=270,266
-    for r in [68,116,158]:
-        s+=circle(cx,cy,r,"none","#26354B",1,'stroke-dasharray="4 9"')
-    s+=circle(cx,cy,27,"#1D2A38",LIME,2)
-    s+=text(cx,cy+6,str(len(repos)),21,PAPER,700,MONO,'text-anchor="middle"')
-    s+=text(cx,cy+44,"REPOS",10,MUTED,600,MONO,'text-anchor="middle"')
-    # Deterministic node constellation; node size scales with number of PRs.
-    nodes=[(112,239),(168,145),(352,159),(422,249),(370,356),(205,378),(95,336)]
+def repo_sheet(prs):
+    counts=collections.Counter(p["repository_url"].split("/repos/")[-1] for p in prs)
+    top=counts.most_common(10)
+    w=1100;h=128+46*len(top)
+    s=label(42,37,"02 / WHERE THE PATCHES WENT")+t(1058,37,"PUBLIC REPOSITORIES",13,QUIET,600,MONO,'text-anchor="end"')
+    s+=l(42,50,1058,50,INK,1.5)
+    s+=t(42,93,"Projects I've opened PRs in",27,INK,400,SERIF)
+    biggest=max((v for _,v in top),default=1)
     for i,(repo,n) in enumerate(top):
-        x,y=nodes[i]
-        color=[LAV,LIME,BLUE,CORAL][i%4]
-        s+=line(cx,cy,x,y,"#526077",1)
-        rr=7+min(15,13*n/maxn)
-        s+=circle(x,y,rr,"#1b2736",color,2)
-        s+=circle(x,y,3.4,color)
-        s+=text(x+rr+7,y-rr-5,str(n),11,color,700,MONO)
-    s+=line(513,157,513,371,"#354054")
-    s+=text(545,166,"REPOSITORY",11,MUTED,600,MONO,'letter-spacing=".8"')
-    s+=text(940,166,"PRS",11,MUTED,600,MONO,'text-anchor="end"')
-    for i,(repo,n) in enumerate(top[:6]):
-        y=199+i*32
-        short=repo if len(repo)<36 else repo[:33]+"..."
-        s+=text(545,y,f"{i+1:02}",12,LAV,700,MONO)
-        s+=text(579,y,short,13,PAPER,500,FONTS)
-        s+=text(938,y,n,13,LIME,700,MONO,'text-anchor="end"')
-        s+=line(545,y+9,940,y+9,"#253044")
-    if not top:s+=text(545,230,"no public PRs returned by the API",13,MUTED)
-    s+=line(50,392,950,392)
-    save("field-atlas.svg",w,h,s,"Repository constellation showing distinct repositories and pull requests")
+        y=134+i*46
+        s+=t(42,y,f"{i+1:02}",14,ACCENT,700,MONO)
+        s+=t(88,y,repo,16,INK,500,SANS)
+        s+=r(630,y-14,365,9,FAINT,1)
+        s+=r(630,y-14,365*n/biggest,9,ACCENT,1)
+        s+=t(1056,y,str(n).zfill(2),16,INK,700,MONO,'text-anchor="end"')
+        s+=l(42,y+14,1058,y+14,HAIR)
+    svg("pr-repositories.svg",w,h,s,"Top upstream repositories by authored pull requests")
 
-def heatmap(prs,today):
-    w,h=1000,245
-    s=eyebrow("03","the trail")
-    s+=text(50,96,"A year of showing up.",29,PAPER,700,FONTS,'letter-spacing="-1"')
+def calendar(prs,now):
     counts=collections.Counter(dt.date.fromisoformat(p["created_at"][:10]) for p in prs)
-    # 53 columns of seven weekdays; choose a Monday-aligned 371-day grid.
-    start=today-dt.timedelta(days=370)
-    start-=dt.timedelta(days=start.weekday())
-    step=16;xx=64;yy=131
-    palette=["#222B39","#494766","#6C68A6","#9E97E9",LIME]
-    previous=None
-    for week in range(54):
-        day=start+dt.timedelta(days=7*week)
-        if day>today:break
-        month=(day.year,day.month)
-        if month!=previous and day.day<8:
-            s+=text(xx+week*step,122,day.strftime("%b").upper(),10,MUTED,500,MONO)
-        previous=month
-        for dow in range(7):
-            d=day+dt.timedelta(days=dow)
-            if d>today:continue
-            c=counts[d]
-            color=palette[min(c,4)]
-            s+=rect(xx+week*step,yy+dow*13.5,11,11,color,2)
-    s+=text(64,236,"MON",9,MUTED,500,MONO)
-    s+=text(138,236,"EACH SQUARE = 1 DAY · SHADED BY PRs OPENED",10,MUTED,400,MONO)
-    s+=text(831,236,"LESS",10,MUTED,400,MONO)
-    for i,c in enumerate(palette):s+=rect(875+i*17,226,11,11,c,2)
-    save("field-trail.svg",w,h,s,"Daily pull request creation heatmap, last year")
+    base=now-dt.timedelta(days=363)
+    base-=dt.timedelta(days=base.weekday())
+    w,h=1100,258
+    s=label(42,34,"03 / A YEAR IN PULL REQUESTS")
+    s+=l(42,47,1058,47,INK,1.5)
+    s+=t(42,87,"Days I submitted PRs",27,INK,400,SERIF)
+    x0=62;y0=120
+    shades=[FAINT,"#DDAF9F","#CA7D66",ACCENT,"#762F24"]
+    last_month=None
+    for week in range(53):
+        first=base+dt.timedelta(days=7*week)
+        if first>now:break
+        if first.month!=last_month and first.day<=7:
+            s+=t(x0+week*18,113,first.strftime("%b").upper(),11,QUIET,700,MONO)
+        last_month=first.month
+        for day in range(7):
+            d=first+dt.timedelta(days=day)
+            if d>now:continue
+            num=counts[d]
+            s+=r(x0+week*18,y0+day*15,12,12,shades[min(num,4)],1)
+    s+=t(43,246,"A square is a day. Shading counts PRs opened, not commits.",13,QUIET)
+    s+=t(925,246,"LESS",11,QUIET,600,MONO)
+    for i,v in enumerate(shades):s+=r(961+i*19,236,12,12,v,1)
+    svg("pr-days.svg",w,h,s,"A one-year calendar showing on which days upstream pull requests were opened")
 
-def update_readme(prs,merged_set):
-    p=Path("README.md")
-    if not p.is_file():
-        return
-    old=p.read_text(encoding="utf-8")
-    begin="<!-- PR_FEED_START -->"
-    end="<!-- PR_FEED_END -->"
-    if begin not in old or end not in old:
-        return
+def populate_readme(prs,merged_urls):
+    path=Path("README.md")
+    if not path.exists():return
+    existing=path.read_text(encoding="utf-8")
+    start="<!-- LIVE_PRS_START -->"
+    stop="<!-- LIVE_PRS_END -->"
+    if start not in existing or stop not in existing:return
     rows=[]
-    for pr in prs[:7]:
-        url=pr["html_url"]
-        repo=pr["repository_url"].split("/repos/")[-1]
-        title=pr["title"].replace("|","\\|").replace("[","\\[").replace("]","\\]")
-        state="🟢 merged" if url in merged_set else ("🟣 open" if pr["state"]=="open" else "⚪ closed")
-        when=pr["created_at"][:10]
-        rows.append(f"| {state} | [{title}]({url}) | {repo} | {when} |")
-    content="| Status | Change | Repository | Opened |\n|:---|:---|:---|:---|\n"+"\n".join(rows)
-    new=old.split(begin,1)[0]+begin+"\n"+content+"\n"+end+old.split(end,1)[1]
-    if new!=old:
-        p.write_text(new,encoding="utf-8")
+    for p in prs[:7]:
+        state="merged" if p["html_url"] in merged_urls else ("open" if p["state"]=="open" else "closed")
+        repo=p["repository_url"].split("/repos/")[-1]
+        title=p["title"].replace("|", "\\|").replace("[", "\\[").replace("]", "\\]").replace("\n", " ")
+        rows.append(f"| {p['created_at'][:10]} | [{title}]({p['html_url']}) | {repo} | {state} |")
+    text_rows="| Opened | Pull request | Repo | Status |\n|:--|:--|:--|:--|\n"+"\n".join(rows)
+    if not rows:text_rows="_No public upstream PRs found._"
+    new=existing.split(start,1)[0]+start+"\n"+text_rows+"\n"+stop+existing.split(stop,1)[1]
+    if new!=existing:path.write_text(new,encoding="utf-8")
 
 def main():
-    # Search pages are deduplicated in case the index changes during pagination.
-    prs=list({p["html_url"]:p for p in query(f"is:pr author:{USER}")}.values())
+    all_prs=list({p["html_url"]:p for p in fetch(f"is:pr author:{USER}")}.values())
+    # Exclude repositories owned by this profile. This is an upstream-contribution index,
+    # not a count padded with PRs in one's own repositories.
+    def foreign(p):
+        return p["repository_url"].split("/repos/")[-1].split("/")[0].lower()!=USER.lower()
+    prs=[p for p in all_prs if foreign(p)]
     prs.sort(key=lambda p:p["created_at"],reverse=True)
-    merged_set={p["html_url"] for p in query(f"is:pr is:merged author:{USER}")}
-    merged=sum(p["html_url"] in merged_set for p in prs)
-    open_n=sum(p["state"]=="open" for p in prs)
-    rate=merged/len(prs) if prs else 0
+    merged_urls={p["html_url"] for p in fetch(f"is:pr is:merged author:{USER}")}
+    m=sum(p["html_url"] in merged_urls for p in prs)
+    repos=len(set(p["repository_url"] for p in prs))
     today=dt.datetime.now(dt.timezone.utc).date()
-    hero(len(prs),merged,open_n,rate,today.isoformat())
-    pulse(prs,merged_set,rate,today)
-    atlas(prs)
-    heatmap(prs,today)
-    update_readme(prs,merged_set)
-    print(f"Rendered Astroknot Field Notes: {len(prs)} PRs, {merged} merged, {open_n} open.")
+    poster(len(prs),m,repos)
+    overview(prs,merged_urls,today)
+    repo_sheet(prs)
+    calendar(prs,today)
+    populate_readme(prs,merged_urls)
+    print("Upstream PRs:",len(prs),"merged:",m,"repos:",repos)
 
 if __name__=="__main__":
     main()
