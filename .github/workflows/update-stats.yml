@@ -1,4 +1,4 @@
-name: Refresh PR dashboard
+name: Render Astroknot Field Notes
 on:
   push:
     branches: [main]
@@ -27,8 +27,8 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/*.svg
+          git add assets/field-*.svg README.md
           if ! git diff --cached --quiet; then
-            git commit -m 'chore: refresh PR charts'
+            git commit -m 'chore: refresh field notes'
             git push
           fi
