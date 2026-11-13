@@ -93,38 +93,54 @@ def eyebrow(index, label, w=1000):
     s += text(w-50,43,"ASTROKNOT—SHEEP / OSS ARCHIVE",11,MUTED,400,MONO,'text-anchor="end"')
     return s + line(50,59,w-50,59)
 
-def hero(n,merged,open_n,rate,stamp):
-    w,h=1000,410
-    s=rect(0,0,w,h,"url(#heroGlow)",16) + rect(0,0,w,h,"url(#microGrid)",16, 'opacity=".33"')
-    s+=circle(805,176,180,"url(#orbGlow)")
-    s+=text(52,48,"ASTROKNOT / SHEEP",14,LIME,700,MONO, 'letter-spacing="2"')
-    s+=text(951,48,"ISSUE 001   •   THE INTERNET",12,MUTED,400,MONO,'text-anchor="end"')
-    s+=line(52,66,948,66,"#435064")
-    s+=text(49,152,"found a bug.",67,PAPER,700,FONTS,'letter-spacing="-3"')
-    s+=text(48,226,"sent a patch.",70,LAV,700,FONTS,'letter-spacing="-3"')
-    s+=text(53,264,"sometimes a fix. sometimes a long review thread.",15,MUTED,400,MONO)
-    # Render a geometric sheep head as an orbiting constellation, no emoji font dependency.
-    cx,cy=808,190
-    for r in [84,118,149]:
-        s+=circle(cx,cy,r,"none","#566279",1,'stroke-dasharray="3 10" opacity=".65"')
-    s+=f'<ellipse cx="{cx}" cy="{cy}" rx="176" ry="69" fill="none" stroke="{LAV}" stroke-width="1.2" transform="rotate(-28 {cx} {cy})" opacity=".85"/>'
-    for x,y,r,c in [(681,145,4,LIME),(919,122,3,PAPER),(862,330,4,LAV),(965,218,3,LIME),(728,246,2,PAPER)]:
-        s+=circle(x,y,r,c)
-    # Distinctive minimal line-drawn sheep: looping wool, face, ears, eyes.
-    cloud="M763 168 C738 145 756 116 785 128 C797 106 833 109 843 133 C872 121 889 143 880 165 C898 183 885 211 861 214 C852 236 819 245 804 225 C780 238 756 220 756 202 C739 192 742 179 763 168Z"
-    s+=f'<path d="{cloud}" fill="#172131" stroke="{PAPER}" stroke-width="2.5" stroke-linejoin="round"/>'
-    s+=f'<path d="M789 181 Q808 167 830 180 L832 217 Q814 237 791 215 Z" fill="#253044" stroke="{PAPER}" stroke-width="2"/>'
-    s+=f'<path d="M789 187 L766 177 Q766 199 789 200 M832 187 L857 176 Q857 199 832 200" fill="#253044" stroke="{PAPER}" stroke-width="2"/>'
-    s+=circle(802,198,3,LIME)+circle(820,198,3,LIME)
-    s+=f'<path d="M807 212 Q813 217 818 212" fill="none" stroke="{PAPER}" stroke-width="2" stroke-linecap="round"/>'
-    s+=text(810,354,"NODE 01: curious sheep",11,MUTED,400,MONO,'text-anchor="middle"')
-    s+=line(52,295,948,295,"#435064")
-    for i,(value,label,col) in enumerate([(f"{n:02}","UPSTREAM PRs",PAPER),(f"{merged:02}","MERGED UPSTREAM",LIME),(f"{open_n:02}","OPEN PRs",LAV),(f"{rate:.0%}","MERGE RATIO",CORAL)]):
-        x=54+i*229
-        s+=text(x,342,value,37,col,700,MONO)+text(x,367,label,10,MUTED,600,MONO,'letter-spacing=".7"')
-        if i<3:s+=line(x+209,313,x+209,372,"#435064")
-    s+=text(949,397,f"LIVE DATA · {stamp}",10,MUTED,400,MONO,'text-anchor="end"')
-    save("field-hero.svg",w,h,s,"Astroknot Open Source Field Notes: real pull request totals")
+def fetch_merged_details(prs, merged_urls):
+    """Fetch true merged_at timestamps once, for summaries, plots and tables."""
+    merged = {}
+    for pr in prs:
+        if pr["html_url"] not in merged_urls:
+            continue
+        url = pr["pull_request"]["url"]
+        headers = {"User-Agent": "astroknot-profile-svg", "Accept": "application/vnd.github+json"}
+        if TOKEN:
+            headers["Authorization"] = "Bearer " + TOKEN
+        with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=35) as response:
+            details = json.load(response)
+        if details.get("merged_at"):
+            merged[pr["html_url"]] = details
+    return merged
+
+def median(values):
+    values = sorted(values)
+    n = len(values)
+    if not n:
+        return 0.0
+    return (values[(n-1)//2] + values[n//2]) / 2
+
+def hero(n, merged, open_n, resolved_rate, median_days, stamp):
+    # The 2:1 editorial banner from the user's reference, not a cluster of cards.
+    w,h=1200,576
+    s=rect(0,0,w,h,INK,0)
+    s+=text(55,49,"DHRIMAN DEKA / ML ENGINEER",17,LIME,700,MONO,'letter-spacing="1"')
+    s+=text(1145,49,"LLM + RETRIEVAL SYSTEMS",16,MUTED,600,MONO,'text-anchor="end" letter-spacing="1"')
+    s+=text(52,184,"found a bug.",104,PAPER,750,FONTS,'letter-spacing="-5"')
+    s+=text(52,289,"sent a patch.",104,LAV,750,FONTS,'letter-spacing="-5"')
+    s+=text(56,346,"i work on the awkward edges of machine learning and retrieval.",22,MUTED,400,FONTS)
+    s+=line(56,377,1144,377,"#3D4551",1.5)
+    values=[
+        (str(merged),"MERGED","UPSTREAM",PAPER),
+        (f"{resolved_rate:.0%}","OF RESOLVED","PRs MERGED",LIME),
+        (f"{median_days:.1f}d","MEDIAN TIME","TO MERGE",LAV),
+        (str(open_n),"OPEN PRs","IN REVIEW",CORAL),
+    ]
+    for i,(value,lab1,lab2,color) in enumerate(values):
+        x=56+i*274
+        s+=text(x,447,value,57,color,700,FONTS,'letter-spacing="-2.5"')
+        s+=text(x,476,lab1,13,MUTED,600,MONO)
+        s+=text(x,497,lab2,13,MUTED,600,MONO)
+    s+=line(56,517,1144,517,"#3D4551",1)
+    s+=text(56,548,"open to ML systems and retrieval engineering work",16,MUTED,400,FONTS)
+    s+=text(1144,548,f"PUBLIC GITHUB DATA · {stamp}",12,MUTED,500,MONO,'text-anchor="end"')
+    save("field-hero.svg",w,h,s,"Dhriman Deka: ML engineer, verified upstream merge statistics")
 
 def smooth_path(points):
     if not points:return ""
@@ -142,84 +158,91 @@ def months_back(today):
         out.append(f"{year:04d}-{month+1:02d}")
     return out
 
-def pulse(prs,merged_set,rate,today):
-    w,h=1000,425
-    s=eyebrow("01","the pulse")
-    s+=text(50,111,"the last twelve months.",31,PAPER,700,FONTS,'letter-spacing="-1"')
-    s+=text(50,137,"PRs opened vs. PRs merged / last twelve months",13,MUTED,400,MONO)
-    s+=text(49,164,"●",13,LAV)+text(67,164,"SUBMITTED",11,MUTED,600,MONO)
-    s+=text(182,164,"●",13,LIME)+text(200,164,"LANDED",11,MUTED,600,MONO)
-    dates=months_back(today)
-    a=collections.Counter(p["created_at"][:7] for p in prs)
-    b=collections.Counter(p.get("closed_at","")[:7] for p in prs if p["html_url"] in merged_set and p.get("closed_at"))
-    peak=max(1,*[max(a[d],b[d]) for d in dates])
-    # Left timeline occupies 650 px; right circular score.
-    left,right,top,bottom=55,672,196,351
-    for j in range(5):
-        y=bottom-j*(bottom-top)/4
-        value=round(peak*j/4)
-        s+=line(left,y,right,y,"#283247",1,'stroke-dasharray="2 6"')
-        s+=text(left-5,y-6,value,10,MUTED,400,MONO)
-    pointsA=[];pointsB=[]
-    for i,d in enumerate(dates):
-        x=left+18+i*(right-left-36)/11
-        ya=bottom-a[d]/peak*(bottom-top)
-        yb=bottom-b[d]/peak*(bottom-top)
-        pointsA.append((x,ya));pointsB.append((x,yb))
-        s+=text(x,bottom+25,d[5:],11,MUTED,400,MONO,'text-anchor="middle"')
-    pA=smooth_path(pointsA);pB=smooth_path(pointsB)
-    s+=f'<path d="{pA} L{pointsA[-1][0]} {bottom} L{pointsA[0][0]} {bottom}Z" fill="url(#areaGrad)"/>'
-    s+=f'<path d="{pA}" fill="none" stroke="{LAV}" stroke-width="3.5" stroke-linejoin="round"/>'
-    s+=f'<path d="{pB}" fill="none" stroke="{LIME}" stroke-width="3.5" stroke-linejoin="round"/>'
-    for x,y in pointsA:s+=circle(round(x,2),round(y,2),3.6,LAV,INK,1.5)
-    for x,y in pointsB:s+=circle(round(x,2),round(y,2),3.6,LIME,INK,1.5)
-    # Donut gauge with oversized type.
-    cx,cy,r=833,269,76
-    s+=circle(cx,cy,r,"none","#2C3448",15)
-    C=2*math.pi*r
-    s+=circle(cx,cy,r,"none",LIME,15,f'stroke-dasharray="{C*rate:.2f} {C:.2f}" stroke-linecap="round" transform="rotate(-90 {cx} {cy})"')
-    s+=text(cx,cy+8,f"{rate:.0%}",41,PAPER,700,MONO,'text-anchor="middle"')
-    s+=text(cx,cy+31,"MERGED / ALL",10,MUTED,500,MONO,'text-anchor="middle"')
-    s+=text(833,382,"PUBLIC UPSTREAM PRs ONLY",10,MUTED,500,MONO,'text-anchor="middle"')
-    s+=line(50,402,950,402)
-    save("field-pulse.svg",w,h,s,"Twelve months of opened and merged pull requests")
+def pulse(prs, merge_info, resolved_rate, today):
+    """Cumulative upstream merges since September 2026; every increment is a real merge."""
+    w,h=1000,392
+    s=eyebrow("01","the work")
+    s+=text(50,109,"merged upstream, over time.",31,PAPER,700,FONTS,'letter-spacing="-1"')
+    s+=text(50,137,"each jump = a PR merged by a maintainer",13,MUTED,400,MONO)
+    start=dt.date(2026,9,1)
+    events=sorted(dt.date.fromisoformat(v["merged_at"][:10]) for v in merge_info.values()
+                  if v.get("merged_at") and dt.date.fromisoformat(v["merged_at"][:10])>=start)
+    end=max(today,start+dt.timedelta(days=1))
+    left,right,top,bottom=74,921,176,321
+    maxval=max(1,len(events))
+    for k in range(5):
+        y=bottom-k*(bottom-top)/4
+        s+=line(left,y,right,y,"#263243",1,'stroke-dasharray="2 7"')
+        s+=text(59,y+4,str(round(maxval*k/4)),11,MUTED,400,MONO,'text-anchor="end"')
+    span=max(1,(end-start).days)
+    def x_for(day): return left+((day-start).days/span)*(right-left)
+    def y_for(count):return bottom-(count/maxval)*(bottom-top)
+    d=f"M{left} {bottom}"
+    count=0
+    for day in events:
+        xx=x_for(day)
+        count+=1
+        d+=f" H{xx:.1f} V{y_for(count):.1f}"
+        s+=circle(round(xx,1),round(y_for(count),1),4.3,LIME,INK,2)
+    d+=f" H{right}"
+    area=d+f" V{bottom} H{left} Z"
+    s+=f'<path d="{area}" fill="url(#areaGrad)" opacity=".5"/>'
+    s+=f'<path d="{d}" stroke="{LIME}" stroke-width="3.4" fill="none" stroke-linejoin="round" stroke-linecap="round"/>'
+    # Quarterly markers plus the current month, adapting to elapsed time.
+    ticks=[]
+    moment=start
+    while moment <= end:
+        ticks.append(moment)
+        month=moment.month+1;year=moment.year
+        if month>12:year+=1;month=1
+        moment=dt.date(year,month,1)
+    ticks.append(end)
+    for i,day in enumerate(ticks):
+        xx=x_for(day)
+        if i==len(ticks)-1 or day.month in (1,3,6,9,11):
+            s+=text(round(xx,1),346,day.strftime("%b '%y"),11,MUTED,400,MONO,'text-anchor="middle"')
+    s+=text(923,112,str(len(events)),37,LIME,700,MONO,'text-anchor="end"')
+    s+=text(923,137,"MERGED SINCE SEP '26",11,MUTED,400,MONO,'text-anchor="end"')
+    s+=line(50,371,950,371)
+    save("field-pulse.svg",w,h,s,"Cumulative upstream PR merges since September 2026")
 
 def atlas(prs):
     w,h=1000,410
-    s=eyebrow("02","the constellation")
-    s+=text(50,111,"where my PRs went.",31,PAPER,700,FONTS,'letter-spacing="-1"')
-    s+=text(50,137,"each node = one repo outside my account. size = PRs opened.",13,MUTED,400,MONO)
+    s=eyebrow("02","where i've sent patches")
     repos=collections.Counter(p["repository_url"].split("/repos/")[-1] for p in prs)
-    top=repos.most_common(7);maxn=max((n for _,n in top),default=1)
-    cx,cy=270,266
-    for r in [68,116,158]:
-        s+=circle(cx,cy,r,"none","#26354B",1,'stroke-dasharray="4 9"')
-    s+=circle(cx,cy,27,"#1D2A38",LIME,2)
-    s+=text(cx,cy+6,str(len(repos)),21,PAPER,700,MONO,'text-anchor="middle"')
-    s+=text(cx,cy+44,"REPOS",10,MUTED,600,MONO,'text-anchor="middle"')
-    # Deterministic node constellation; node size scales with number of PRs.
-    nodes=[(112,239),(168,145),(352,159),(422,249),(370,356),(205,378),(95,336)]
-    for i,(repo,n) in enumerate(top):
+    top=repos.most_common(6)
+    total=len(repos)
+    maxn=max((n for _,n in top),default=1)
+    s+=text(50,110,"the repositories.",31,PAPER,700,FONTS,'letter-spacing="-1"')
+    s+=text(50,139,f"top {len(top)} of {total} upstream repositories",13,MUTED,400,MONO)
+    cx,cy=252,283
+    for radius in [71,120,163]:
+        s+=circle(cx,cy,radius,"none","#29364B",1,'stroke-dasharray="4 9"')
+    s+=circle(cx,cy,33,"#1B2838",LAV,2)
+    s+=text(cx,cy+6,str(total),23,PAPER,700,MONO,'text-anchor="middle"')
+    s+=text(cx,cy+23,"REPOS",8,MUTED,500,MONO,'text-anchor="middle"')
+    nodes=[(106,265),(174,199),(321,204),(398,285),(329,362),(157,361)]
+    for i,(_,n) in enumerate(top):
         x,y=nodes[i]
-        color=[LAV,LIME,BLUE,CORAL][i%4]
-        s+=line(cx,cy,x,y,"#526077",1)
-        rr=7+min(15,13*n/maxn)
-        s+=circle(x,y,rr,"#1b2736",color,2)
-        s+=circle(x,y,3.4,color)
-        s+=text(x+rr+7,y-rr-5,str(n),11,color,700,MONO)
-    s+=line(513,157,513,371,"#354054")
-    s+=text(545,166,"REPOSITORY",11,MUTED,600,MONO,'letter-spacing=".8"')
-    s+=text(940,166,"PRS",11,MUTED,600,MONO,'text-anchor="end"')
-    for i,(repo,n) in enumerate(top[:6]):
-        y=199+i*32
-        short=repo if len(repo)<36 else repo[:33]+"..."
-        s+=text(545,y,f"{i+1:02}",12,LAV,700,MONO)
-        s+=text(579,y,short,13,PAPER,500,FONTS)
-        s+=text(938,y,n,13,LIME,700,MONO,'text-anchor="end"')
-        s+=line(545,y+9,940,y+9,"#253044")
-    if not top:s+=text(545,230,"no public PRs returned by the API",13,MUTED)
-    s+=line(50,392,950,392)
-    save("field-atlas.svg",w,h,s,"Repository constellation showing distinct repositories and pull requests")
+        c=[LIME,LAV,BLUE,CORAL][i%4]
+        s+=line(cx,cy,x,y,"#4C5970",1)
+        radius=6+min(12,12*n/maxn)
+        s+=circle(x,y,radius,"#182534",c,2)
+        s+=circle(x,y,3,c)
+    s+=line(499,160,499,369,"#3B495F",1)
+    s+=text(530,170,"TOP 6 / 19",11,LIME,600,MONO)
+    s+=text(944,170,"PRS",11,MUTED,600,MONO,'text-anchor="end"')
+    for i,(repo,n) in enumerate(top):
+        y=206+i*30
+        shortened=repo if len(repo)<=38 else repo[:35]+"..."
+        s+=text(531,y,f"{i+1:02}",11,LAV,600,MONO)
+        s+=text(562,y,shortened,13,PAPER,400,FONTS)
+        s+=text(944,y,n,13,LIME,700,MONO,'text-anchor="end"')
+        s+=line(531,y+8,944,y+8,"#27344B")
+    # Correct the legend as repository count changes.
+    s=s.replace("TOP 6 / 19",f"TOP {len(top)} OF {total}")
+    s+=line(50,393,950,393)
+    save("field-atlas.svg",w,h,s,"Six leading upstream repositories among all repositories with authored PRs")
 
 def heatmap(prs,today):
     w,h=1000,245
@@ -251,94 +274,116 @@ def heatmap(prs,today):
     for i,c in enumerate(palette):s+=rect(875+i*17,226,11,11,c,2)
     save("field-trail.svg",w,h,s,"Daily pull request creation heatmap, last year")
 
-def update_readme(prs,merged_urls):
-    """Maintain the existing human-written README; only refresh the marked PR table."""
-    file = Path("README.md")
-    if not file.is_file():
-        return
-    old = file.read_text(encoding="utf-8")
-    begin, end = "<!-- LIVE_PRS_START -->", "<!-- LIVE_PRS_END -->"
-    if begin not in old or end not in old:
-        return
-    rows = []
-    for pr in prs[:7]:
-        url = pr["html_url"]
-        repo = pr["repository_url"].split("/repos/")[-1]
-        title = pr["title"].replace("|", "\\|").replace("[", "\\[").replace("]", "\\]").replace("\n", " ")
-        status = "merged" if url in merged_urls else ("open" if pr["state"] == "open" else "closed")
-        rows.append(f"| {pr['created_at'][:10]} | [{title}]({url}) | {repo} | {status} |")
-    content = "| Opened | Pull request | Repo | Status |\n|:--|:--|:--|:--|\n" + "\n".join(rows)
-    if not rows:
-        content = "_No public upstream PRs found._"
-    new = old.split(begin, 1)[0] + begin + "\n" + content + "\n" + end + old.split(end, 1)[1]
-    if new != old:
-        file.write_text(new, encoding="utf-8")
+def update_readme(prs):
+    """Keep the prose intact; list only open upstream PRs in consistent dates."""
+    file=Path("README.md")
+    if not file.exists():return
+    original=file.read_text(encoding="utf-8")
+    begin,end="<!-- LIVE_PRS_START -->","<!-- LIVE_PRS_END -->"
+    if begin not in original or end not in original:return
+    rows=[]
+    for pr in [p for p in prs if p["state"]=="open"][:7]:
+        url=pr["html_url"]
+        repo=pr["repository_url"].split("/repos/")[-1]
+        title=pr["title"].replace("|","\\|").replace("[","\\[").replace("]","\\]").replace("\n"," ")
+        date=dt.date.fromisoformat(pr["created_at"][:10]).strftime("%d %b %Y")
+        rows.append(f"| {date} | [{title}]({url}) | {repo} |")
+    table="| Opened | Pull request | Repository |\n|:--|:--|:--|\n"+"\n".join(rows) if rows else "_No PRs currently open._"
+    new=original.split(begin,1)[0]+begin+"\n"+table+"\n"+end+original.split(end,1)[1]
+    if new!=original:file.write_text(new,encoding="utf-8")
 
-def update_merged_history(prs, merged_urls):
-    """List every upstream merge with its actual GitHub merge timestamp (UTC)."""
-    file = Path("README.md")
-    if not file.is_file():
-        return
-    original = file.read_text(encoding="utf-8")
-    begin, end = "<!-- MERGED_HISTORY_START -->", "<!-- MERGED_HISTORY_END -->"
-    if begin not in original or end not in original:
-        return
-    entries = []
+# One-line descriptions grounded in the actual merged fixes.
+PR_SUMMARIES={
+    "qdrant/qdrant-client": "Set the gRPC text-index tokenizer's default to word.",
+    "mlflow/mlflow": "Handle Gemini safety blocks as content-filter events.",
+    "deepset-ai/haystack": "Correct line ranges in PythonCodeSplitter secondary splits.",
+    "deepset-ai/haystack-core-integrations": "Fix numeric casting in pgvector metadata filters.",
+    "docling-project/docling": "Close an open list before a following table in DOCX conversion.",
+    "pydantic/logfire": "Avoid reporting early generator closure as an error.",
+    "huggingface/sentence-transformers": "Correct a training-arguments import in examples.",
+}
+
+def update_merged_history(prs, merge_info):
+    """Render merged upstream PRs with exact GitHub timestamps, review times, and context."""
+    file=Path("README.md")
+    if not file.exists():return
+    original=file.read_text(encoding="utf-8")
+    begin,end="<!-- MERGED_HISTORY_START -->","<!-- MERGED_HISTORY_END -->"
+    if begin not in original or end not in original:return
+    entries=[]
     for pr in prs:
-        if pr["html_url"] not in merged_urls:
-            continue
-        # Search/issues.closed_at is not a reliable merge timestamp.
-        # Fetch the pull request itself for merged_at.
-        url = pr["pull_request"]["url"]
-        headers = {"User-Agent": "astroknot-profile-svg", "Accept": "application/vnd.github+json"}
-        if TOKEN:
-            headers["Authorization"] = "Bearer " + TOKEN
-        req = urllib.request.Request(url, headers=headers)
-        with urllib.request.urlopen(req, timeout=35) as response:
-            details = json.load(response)
-        when = details.get("merged_at")
-        if not when:
-            continue
-        repository = pr["repository_url"].split("/repos/")[-1]
-        title = pr["title"].replace("|", "\\|").replace("[", "\\[").replace("]", "\\]").replace("\n", " ")
-        timestamp = dt.datetime.fromisoformat(when.replace("Z", "+00:00"))
-        entries.append((timestamp, repository, title, pr["html_url"], pr["created_at"]))
-    entries.sort(reverse=True)
-    rows = []
-    for timestamp, repository, title, url, created in entries:
-        created_time = dt.datetime.fromisoformat(created.replace("Z", "+00:00"))
-        duration = timestamp - created_time
-        days = duration.total_seconds() / 86400
-        elapsed = f"{days:.1f} days" if days >= 1 else f"{duration.total_seconds()/3600:.1f} hours"
-        rows.append(f"| {timestamp.strftime('%d %b %Y, %H:%M UTC')} | [{title}]({url}) | {repository} | {elapsed} |")
-    table = "| Merged at (UTC) | PR | Repository | Time to merge |\n|:--|:--|:--|--:|\n" + "\n".join(rows)
-    if not rows:
-        table = "_No upstream merges found._"
-    new = original.split(begin, 1)[0] + begin + "\n" + table + "\n" + end + original.split(end, 1)[1]
-    if new != original:
-        file.write_text(new, encoding="utf-8")
+        details=merge_info.get(pr["html_url"])
+        if not details:continue
+        timestamp=dt.datetime.fromisoformat(details["merged_at"].replace("Z","+00:00"))
+        created=dt.datetime.fromisoformat(pr["created_at"].replace("Z","+00:00"))
+        elapsed=(timestamp-created).total_seconds()/86400
+        repo=pr["repository_url"].split("/repos/")[-1]
+        title=pr["title"].replace("|","\\|").replace("[","\\[").replace("]","\\]").replace("\n"," ")
+        entries.append((timestamp,elapsed,repo,title,pr["html_url"]))
+    entries.sort(key=lambda item:item[0],reverse=True)
+    rows=[]
+    for timestamp,days,repo,title,url in entries:
+        human=f"{days:.1f}d" if days>=1 else f"{days*24:.1f}h"
+        blurb=PR_SUMMARIES.get(repo, "A bugfix merged by upstream maintainers.")
+        rows.append(f"| {timestamp.strftime('%d %b %Y, %H:%M UTC')} | [{title}]({url})<br><sub>{blurb}</sub> | {repo} | {human} |")
+    table="| Merged at | Fix | Repository | Time to merge |\n|:--|:--|:--|--:|\n"+"\n".join(rows)
+    if not rows:table="_No upstream merges found._"
+    new=original.split(begin,1)[0]+begin+"\n"+table+"\n"+end+original.split(end,1)[1]
+    if new!=original:file.write_text(new,encoding="utf-8")
+
+def hero_mobile(merged,open_n,resolved_rate,median_days,stamp):
+    """A 2-column companion to the desktop SVG for narrow screens."""
+    w,h=640,620
+    s=rect(0,0,w,h,INK)
+    s+=text(34,45,"DHRIMAN DEKA / ML ENGINEER",16,LIME,700,MONO)
+    s+=text(34,75,"LLM + RETRIEVAL SYSTEMS",15,MUTED,500,MONO)
+    s+=text(31,185,"found a bug.",76,PAPER,750,FONTS,'letter-spacing="-4"')
+    s+=text(31,274,"sent a patch.",76,LAV,750,FONTS,'letter-spacing="-4"')
+    s+=text(34,316,"fixing the rough edges of ML systems.",19,MUTED,400,FONTS)
+    s+=line(34,343,606,343,"#3D4551")
+    pairs=[
+        (34,409,str(merged),["MERGED","UPSTREAM"],PAPER),
+        (330,409,f"{resolved_rate:.0%}",["RESOLVED PRs","MERGED"],LIME),
+        (34,515,f"{median_days:.1f}d",["MEDIAN TIME","TO MERGE"],LAV),
+        (330,515,str(open_n),["OPEN PRs","IN REVIEW"],CORAL)
+    ]
+    for x,y,value,labels,color in pairs:
+        s+=text(x,y,value,48,color,700,FONTS)
+        s+=text(x,y+24,labels[0],13,MUTED,500,MONO)
+        s+=text(x,y+41,labels[1],13,MUTED,500,MONO)
+    s+=line(34,568,606,568,"#3D4551")
+    s+=text(34,594,f"PUBLIC GITHUB DATA · {stamp}",12,MUTED,400,MONO)
+    save("field-hero-mobile.svg",w,h,s,"Dhriman Deka: public merged pull requests, resolved rate and median merge time")
 
 def main():
-    all_prs = list({p["html_url"]: p for p in query(f"is:pr author:{USER}")}.values())
-    # Exclude PRs in personally owned repositories, so the metrics mean upstream contributions.
-    def is_upstream(pr):
-        owner = pr["repository_url"].split("/repos/")[-1].split("/")[0]
-        return owner.lower() != USER.lower()
-    prs = [p for p in all_prs if is_upstream(p)]
-    prs.sort(key=lambda p: p["created_at"], reverse=True)
-    merged_urls = {p["html_url"] for p in query(f"is:pr is:merged author:{USER}")}
-    merged_count = sum(p["html_url"] in merged_urls for p in prs)
-    open_count = sum(p["state"] == "open" for p in prs)
-    rate = merged_count / len(prs) if prs else 0
-    today = dt.datetime.now(dt.timezone.utc).date()
-    hero(len(prs), merged_count, open_count, rate, today.isoformat())
-    pulse(prs, merged_urls, rate, today)
+    all_prs=list({p["html_url"]:p for p in query(f"is:pr author:{USER}")}.values())
+    def upstream(pr):
+        owner=pr["repository_url"].split("/repos/")[-1].split("/")[0]
+        return owner.lower()!=USER.lower()
+    prs=[p for p in all_prs if upstream(p)]
+    prs.sort(key=lambda p:p["created_at"],reverse=True)
+    merged_urls={p["html_url"] for p in query(f"is:pr is:merged author:{USER}")}
+    merge_info=fetch_merged_details(prs,merged_urls)
+    merged_count=len(merge_info)
+    open_count=sum(p["state"]=="open" for p in prs)
+    resolved_count=len(prs)-open_count
+    resolved_rate=merged_count/resolved_count if resolved_count else 0
+    times=[]
+    for pr in prs:
+        d=merge_info.get(pr["html_url"])
+        if not d:continue
+        merge_time=dt.datetime.fromisoformat(d["merged_at"].replace("Z","+00:00"))
+        opened=dt.datetime.fromisoformat(pr["created_at"].replace("Z","+00:00"))
+        times.append((merge_time-opened).total_seconds()/86400)
+    median_days=median(times)
+    today=dt.datetime.now(dt.timezone.utc).date()
+    hero(len(prs),merged_count,open_count,resolved_rate,median_days,today.isoformat())
+    hero_mobile(merged_count,open_count,resolved_rate,median_days,today.isoformat())
+    pulse(prs,merge_info,resolved_rate,today)
     atlas(prs)
-    heatmap(prs, today)
-    update_readme(prs, merged_urls)
-    update_merged_history(prs, merged_urls)
-    print(f"Rendered field notes: {len(prs)} upstream PRs, {merged_count} merged, {open_count} open.")
-
+    update_readme(prs)
+    update_merged_history(prs,merge_info)
+    print(f"Upstream PRs: {len(prs)}, merged: {merged_count}, open: {open_count}, resolved merge rate: {resolved_rate:.1%}, median: {median_days:.1f}d")
 
 if __name__=="__main__":
     main()
