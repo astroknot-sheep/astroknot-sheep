@@ -1,155 +1,85 @@
-<!-- hey. thanks for stopping by. -->
+<!-- hi, thanks for looking around. -->
 
 <p align="center">
-<img src="./assets/field-hero.svg" width="100%" alt="Astroknot Sheep / Open Source Field Notes">
+  <img src="./assets/profile-poster.svg" alt="dhriman deka — GitHub profile, with live upstream PR numbers" width="100%">
 </p>
 
-i'm dhriman. call me **[@astroknot-sheep](https://github.com/astroknot-sheep)**.  
-yes, the sheep is on purpose. 🐑
+hi, i'm dhriman.
 
-i don't have a grand mission statement. i just like building small things that *might* help someone.
+i studied economics at IISER Bhopal and ended up working on machine learning systems. lately i've spent a lot of time in other people's repositories. i like finding out why something broke, fixing it, and seeing whether the fix survives review.
 
-### 01 / the pulse
-![Monthly PRs and merge rate](./assets/field-pulse.svg)
+and yes, the sheep in [@astroknot-sheep](https://github.com/astroknot-sheep) was deliberate. 🐑
 
-### 02 / the constellation
-![Repositories receiving my pull requests](./assets/field-atlas.svg)
-
-### 03 / the trail
-![PR creation heatmap](./assets/field-trail.svg)
-
-<sub>real public PRs, refreshed daily. merge ratio = merged PRs / total opened PRs. this heatmap counts PR openings, not commits.</sub>
-
-### 04 / dispatch log
-
-the latest patches sent into the wild:
-
-<!-- PR_FEED_START -->
-| Status | Change | Repository | Opened |
-|:---|:---|:---|:---|
-| 🟢 merged | [design: rebuild profile as Astroknot Open Source Field Notes](https://github.com/astroknot-sheep/astroknot-sheep/pull/2) | astroknot-sheep/astroknot-sheep | 2026-11-13 |
-| 🟢 merged | [feat: live pull request analytics on profile](https://github.com/astroknot-sheep/astroknot-sheep/pull/1) | astroknot-sheep/astroknot-sheep | 2026-11-13 |
-| 🟣 open | [fix: convert common Python types in Agent tool results to JSON](https://github.com/deepset-ai/haystack/pull/13728) | deepset-ai/haystack | 2026-11-13 |
-| 🟣 open | [Support `@logfire.instrument` above `@classmethod` and `@staticmethod`](https://github.com/pydantic/logfire/pull/2807) | pydantic/logfire | 2026-11-12 |
-| 🟣 open | [Report the reducer in unified TS.MRANGE/MREVRANGE metadata on RESP2 with GROUPBY](https://github.com/redis/redis-py/pull/4634) | redis/redis-py | 2026-11-12 |
-| 🟣 open | [fix: pass the content type to the deserializer in LocalEndpoint.invoke](https://github.com/aws/sagemaker-python-sdk/pull/6579) | aws/sagemaker-python-sdk | 2026-11-12 |
-| 🟢 merged | [fix(docx): close an open list before a table that follows it](https://github.com/docling-project/docling/pull/5309) | docling-project/docling | 2026-11-12 |
-<!-- PR_FEED_END -->
-
-[all PRs](https://github.com/pulls?q=is%3Apr+author%3Aastroknot-sheep) · [landed upstream](https://github.com/pulls?q=is%3Apr+is%3Amerged+author%3Aastroknot-sheep) · [still open](https://github.com/pulls?q=is%3Apr+is%3Aopen+author%3Aastroknot-sheep)
-
-<details><summary><strong>some upstream patches i'm happy about</strong></summary>
-
-- [MLflow #27018](https://github.com/mlflow/mlflow/pull/27018) — Gemini safety block handling
-- [Qdrant Client #1617](https://github.com/qdrant/qdrant-client/pull/1617) — default tokenizer parity
-- [Sentence Transformers #4246](https://github.com/huggingface/sentence-transformers/pull/4246) — import fix in examples
-
-</details>
+**[pull requests](https://github.com/pulls?q=is%3Apr+author%3Aastroknot-sheep)** · **[my repositories](https://github.com/astroknot-sheep?tab=repositories)** · **[discussions](https://github.com/astroknot-sheep/astroknot-sheep/discussions)**
 
 ---
 
-## what i'm fiddling with right now
+## some fixes that made it upstream
 
-<details open>
-<summary><strong>🧠 KONARQ_MATRI</strong> — mental health tech that doesn't feel creepy</summary>
-<br>
-• typescript, nestjs, lots of second-guessing<br>
-• privacy-first, referral-aware, human-centered<br>
-👉 <a href="https://github.com/astroknot-sheep/KONARQ_MATRI">see the code</a>
-</details>
+these are the kind of contributions i enjoy: specific bugs, readable changes, and a review thread where someone makes the code better.
+
+- **[MLflow](https://github.com/mlflow/mlflow/pull/27018)** — Gemini safety blocks weren't being reported as content-filter events. fixed how the gateway handles them.
+- **[Qdrant Client](https://github.com/qdrant/qdrant-client/pull/1617)** — the default tokenizer for a gRPC text index wasn't matching the expected `word` default.
+- **[Haystack](https://github.com/deepset-ai/haystack/pull/13437)** — corrected line ranges when `PythonCodeSplitter` makes secondary splits.
+- **[Logfire](https://github.com/pydantic/logfire/pull/2785)** — closing a generator early shouldn't look like an application error.
+- **[Sentence Transformers](https://github.com/huggingface/sentence-transformers/pull/4246)** — fixed a broken training-arguments import in the examples.
+
+there are more. the actual code and discussions are linked, so you don't have to take my word for any of it.
+
+## pull requests, over time
+
+<img src="./assets/pr-months.svg" alt="A chart showing public upstream PRs opened and merged each month" width="100%">
 
 <details>
-<summary><strong>📈 finance_transformer</strong> — can transformers read stock charts?</summary>
-<br>
-• python + pytorch playground<br>
-• adapting attention for continuous financial time-series<br>
-• spoiler: sometimes it works. mostly it confuses noise for signal. still fun.<br>
-👉 <a href="https://github.com/astroknot-sheep/finance_transformer">see the code</a>
+<summary><strong>where i've contributed — by repository</strong></summary>
+
+<img src="./assets/pr-repositories.svg" alt="Repositories sorted by the number of PRs I've opened" width="100%">
+
 </details>
+
+<img src="./assets/pr-days.svg" alt="Days I opened PRs during the past year" width="100%">
+
+<sub>the numbers above count public PRs to repositories i don't own. PRs to my own repos aren't mixed in. data comes from GitHub and refreshes daily; this heatmap is about PRs, not commits.</sub>
+
+### recent PRs
+
+<!-- LIVE_PRS_START -->
+_this table updates automatically._
+<!-- LIVE_PRS_END -->
+
+[all pull requests](https://github.com/pulls?q=is%3Apr+author%3Aastroknot-sheep) · [merged upstream](https://github.com/pulls?q=is%3Apr+is%3Amerged+author%3Aastroknot-sheep) · [still open](https://github.com/pulls?q=is%3Apr+is%3Aopen+author%3Aastroknot-sheep)
+
+---
+
+## things i'm making
+
+**[KONARQ_MATRI](https://github.com/astroknot-sheep/KONARQ_MATRI)**  
+a mental-health support project. i'm thinking about privacy, referrals, and where software should step aside for a human.
+
+**[finance_transformer](https://github.com/astroknot-sheep/finance_transformer)**  
+trying transformer models on financial time series. mostly a lesson in how convincing noise can look.
+
+**[DQN for Ludo](https://github.com/astroknot-sheep/Reinforcement_Learning_DQN_for_Ludo)**  
+double DQN, prioritized experience replay, and a game that makes the experiments less abstract.
 
 <details>
-<summary><strong>🎲 DQN for Ludo</strong> — teaching AI to play better than my cousins</summary>
-<br>
-• double dqn + prioritized replay + chai breaks<br>
-• math notes included (no jargon without explanation)<br>
-👉 <a href="https://github.com/astroknot-sheep/Reinforcement_Learning_DQN_for_Ludo">see the code</a>
+<summary>older experiments and side projects</summary>
+
+- [TWS_WriterAgent](https://github.com/astroknot-sheep/TWS_WriterAgent) — experimenting with agents.
+- [ML_project_final](https://github.com/astroknot-sheep/ML_project_final) — an earlier machine learning project.
+- [mlproject](https://github.com/astroknot-sheep/mlproject) — an old sandbox.
+- [data-gravity-portfolio](https://github.com/astroknot-sheep/data-gravity-portfolio) — another work in progress.
+
 </details>
 
-<details>
-<summary><strong>📦 other experiments</strong></summary>
-<br>
-• <a href="https://github.com/astroknot-sheep/TWS_WriterAgent">TWS_WriterAgent</a> — playful agent prototyping<br>
-• <a href="https://github.com/astroknot-sheep/ML_project_final">ML_project_final</a> — completed learning journey<br>
-• <a href="https://github.com/astroknot-sheep/mlproject">mlproject</a> — early sandbox<br>
-• <a href="https://github.com/astroknot-sheep/data-gravity-portfolio">data-gravity-portfolio</a> — fresh sprouts 🌱
-</details>
+## the usual tools
 
----
+Python, PyTorch, TypeScript, Git, Docker, Jupyter. depends what i'm breaking that week.
 
-## tools i use (and sometimes fight with)
+## say hello
 
-`python` `typescript` `pytorch` `git` `jupyter` `vs code` `chai`
+have a question about a PR? spotted a mistake? working on something similar?
 
-i'm not an expert in any of these.  
-i just keep showing up.
+you can [open a discussion](https://github.com/astroknot-sheep/astroknot-sheep/discussions). i don't mind questions, including beginner ones.
 
----
-
-## want to interact? here's how. (no bots, no dead links)
-
-### 🎲 quick game
-
-guess which repo has a hidden comment that says `"you found me 🐑"`.  
-open an issue with the answer. first one gets my eternal gratitude + a detailed code review of your choice.
-
-### 💬 ask me anything
-
-- how do i start with RL?
-- is this mental health idea actually useful?
-- why does my transformer keep overfitting?
-- how do i structure a proper ML project from scratch?
-- what's your favorite chai spot?
-
-→ just open an issue. no question is too small.  
-→ or start a discussion: [here](https://github.com/astroknot-sheep/astroknot-sheep/discussions)
-
-### 🤝 want to collaborate?
-
-if you're working on:
-
-- ethical AI
-- accessible mental health tools
-- financial ML experiments
-- weird RL applications
-- or just want to pair-program and learn…
-
-…hit me up. i reply. (usually within 48 hrs.)
-
----
-
-## real talk
-
-i'm not trying to "disrupt" anything.  
-i'm just:
-
-- learning in public  
-- sharing half-baked ideas  
-- hoping one of them sticks and helps someone
-
-if that resonates —  
-→ star a repo  
-→ fork and break something  
-→ open a discussion  
-→ or just wave 👋
-
-i see you. and i appreciate you being here.
-
----
-
-> p.s. if you read this whole thing:  
-> you're either very curious or very bored.  
-> either way — welcome. 🫶  
->   
-> p.p.s. the sheep was definitely on purpose.
-
-<!-- Open source stats are refreshed by GitHub Actions -->
+<sub>this profile's graphs are generated in-repo with Python and GitHub Actions. [source code](./scripts/generate_pr_dashboard.py).</sub>
