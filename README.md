@@ -1,7 +1,7 @@
 <!-- hi, thanks for looking around. -->
 
 <p align="center">
-  <img src="./assets/profile-poster.svg" alt="dhriman deka — GitHub profile, with live upstream PR numbers" width="100%">
+  <img src="./assets/field-hero.svg" alt="Astroknot sheep, a hand-drawn orbital illustration and live upstream pull request numbers" width="100%">
 </p>
 
 hi, i'm dhriman.
@@ -28,16 +28,16 @@ there are more. the actual code and discussions are linked, so you don't have to
 
 ## pull requests, over time
 
-<img src="./assets/pr-months.svg" alt="A chart showing public upstream PRs opened and merged each month" width="100%">
+<img src="./assets/field-pulse.svg" alt="A chart showing public upstream PRs opened and merged each month" width="100%">
 
-<details>
+<details open>
 <summary><strong>where i've contributed — by repository</strong></summary>
 
-<img src="./assets/pr-repositories.svg" alt="Repositories sorted by the number of PRs I've opened" width="100%">
+<img src="./assets/field-atlas.svg" alt="Repositories sorted by the number of PRs I've opened" width="100%">
 
 </details>
 
-<img src="./assets/pr-days.svg" alt="Days I opened PRs during the past year" width="100%">
+<img src="./assets/field-trail.svg" alt="Days I opened PRs during the past year" width="100%">
 
 <sub>the numbers above count public PRs to repositories i don't own. PRs to my own repos aren't mixed in. data comes from GitHub and refreshes daily; this heatmap is about PRs, not commits.</sub>
 

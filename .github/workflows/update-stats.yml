@@ -1,4 +1,4 @@
-name: Refresh pull request record
+name: Refresh open-source field notes
 on:
   push:
     branches: [main]
@@ -27,8 +27,8 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/profile-poster.svg assets/pr-months.svg assets/pr-repositories.svg assets/pr-days.svg README.md
+          git add assets/field-*.svg README.md
           if ! git diff --cached --quiet; then
-            git commit -m 'chore: update PR record'
+            git commit -m 'chore: update field notes'
             git push
           fi
