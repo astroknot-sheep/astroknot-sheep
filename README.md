@@ -48,6 +48,7 @@ this is the complete upstream merge history, newest first. the timestamps come f
 <!-- MERGED_HISTORY_START -->
 | Merged at (UTC) | PR | Repository | Time to merge |
 |:--|:--|:--|--:|
+| 16 Nov 2026, 10:03 UTC | [Report the reducer in unified TS.MRANGE/MREVRANGE metadata on RESP2 with GROUPBY](https://github.com/redis/redis-py/pull/4634) | redis/redis-py | 3.6 days |
 | 13 Nov 2026, 07:44 UTC | [fix(pgvector): cast numeric meta filters to numeric instead of integer/real](https://github.com/deepset-ai/haystack-core-integrations/pull/4149) | deepset-ai/haystack-core-integrations | 22.4 days |
 | 13 Nov 2026, 05:37 UTC | [fix(docx): close an open list before a table that follows it](https://github.com/docling-project/docling/pull/5309) | docling-project/docling | 1.2 days |
 | 12 Nov 2026, 10:19 UTC | [Don't record GeneratorExit as an error when a generator is closed early](https://github.com/pydantic/logfire/pull/2785) | pydantic/logfire | 18.8 hours |
@@ -63,8 +64,8 @@ this is the complete upstream merge history, newest first. the timestamps come f
 | Opened | Pull request | Repo | Status |
 |:--|:--|:--|:--|
 | 2026-11-13 | [fix: convert common Python types in Agent tool results to JSON](https://github.com/deepset-ai/haystack/pull/13728) | deepset-ai/haystack | open |
-| 2026-11-12 | [Support `@logfire.instrument` above `@classmethod` and `@staticmethod`](https://github.com/pydantic/logfire/pull/2807) | pydantic/logfire | open |
-| 2026-11-12 | [Report the reducer in unified TS.MRANGE/MREVRANGE metadata on RESP2 with GROUPBY](https://github.com/redis/redis-py/pull/4634) | redis/redis-py | open |
+| 2026-11-12 | [Support `@logfire.instrument` above `@classmethod` and `@staticmethod`](https://github.com/pydantic/logfire/pull/2807) | pydantic/logfire | closed |
+| 2026-11-12 | [Report the reducer in unified TS.MRANGE/MREVRANGE metadata on RESP2 with GROUPBY](https://github.com/redis/redis-py/pull/4634) | redis/redis-py | merged |
 | 2026-11-12 | [fix: pass the content type to the deserializer in LocalEndpoint.invoke](https://github.com/aws/sagemaker-python-sdk/pull/6579) | aws/sagemaker-python-sdk | open |
 | 2026-11-12 | [fix(docx): close an open list before a table that follows it](https://github.com/docling-project/docling/pull/5309) | docling-project/docling | merged |
 | 2026-11-11 | [Don't record GeneratorExit as an error when a generator is closed early](https://github.com/pydantic/logfire/pull/2785) | pydantic/logfire | merged |
