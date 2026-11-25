@@ -65,13 +65,13 @@ this is the complete upstream merge history, newest first. the timestamps come f
 <!-- LIVE_PRS_START -->
 | Opened | Pull request | Repo | Status |
 |:--|:--|:--|:--|
+| 2026-11-25 | [fix: keep the text of tables nested in DOCX table cells](https://github.com/deepset-ai/haystack/pull/13906) | deepset-ai/haystack | open |
 | 2026-11-24 | [fix(faiss): keep searching when filters drop the first candidates](https://github.com/deepset-ai/haystack-core-integrations/pull/4323) | deepset-ai/haystack-core-integrations | open |
 | 2026-11-16 | [fix(sqlalchemy): keep colons in SQL string literals literal](https://github.com/deepset-ai/haystack-core-integrations/pull/4279) | deepset-ai/haystack-core-integrations | merged |
 | 2026-11-13 | [fix: convert common Python types in Agent tool results to JSON](https://github.com/deepset-ai/haystack/pull/13728) | deepset-ai/haystack | merged |
 | 2026-11-12 | [Support `@logfire.instrument` above `@classmethod` and `@staticmethod`](https://github.com/pydantic/logfire/pull/2807) | pydantic/logfire | closed |
 | 2026-11-12 | [Report the reducer in unified TS.MRANGE/MREVRANGE metadata on RESP2 with GROUPBY](https://github.com/redis/redis-py/pull/4634) | redis/redis-py | merged |
 | 2026-11-12 | [fix: pass the content type to the deserializer in LocalEndpoint.invoke](https://github.com/aws/sagemaker-python-sdk/pull/6579) | aws/sagemaker-python-sdk | open |
-| 2026-11-12 | [fix(docx): close an open list before a table that follows it](https://github.com/docling-project/docling/pull/5309) | docling-project/docling | merged |
 <!-- LIVE_PRS_END -->
 
 [all pull requests](https://github.com/pulls?q=is%3Apr+author%3Aastroknot-sheep) · [merged upstream](https://github.com/pulls?q=is%3Apr+is%3Amerged+author%3Aastroknot-sheep) · [still open](https://github.com/pulls?q=is%3Apr+is%3Aopen+author%3Aastroknot-sheep)
