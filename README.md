@@ -65,7 +65,7 @@ this is the complete upstream merge history, newest first. the timestamps come f
 <!-- LIVE_PRS_START -->
 | Opened | Pull request | Repo | Status |
 |:--|:--|:--|:--|
-| 2026-11-25 | [fix: keep the text of tables nested in DOCX table cells](https://github.com/deepset-ai/haystack/pull/13906) | deepset-ai/haystack | open |
+| 2026-11-25 | [fix: keep the text of tables nested in DOCX table cells](https://github.com/deepset-ai/haystack/pull/13906) | deepset-ai/haystack | closed |
 | 2026-11-24 | [fix(faiss): keep searching when filters drop the first candidates](https://github.com/deepset-ai/haystack-core-integrations/pull/4323) | deepset-ai/haystack-core-integrations | open |
 | 2026-11-16 | [fix(sqlalchemy): keep colons in SQL string literals literal](https://github.com/deepset-ai/haystack-core-integrations/pull/4279) | deepset-ai/haystack-core-integrations | merged |
 | 2026-11-13 | [fix: convert common Python types in Agent tool results to JSON](https://github.com/deepset-ai/haystack/pull/13728) | deepset-ai/haystack | merged |
