@@ -48,6 +48,7 @@ this is the complete upstream merge history, newest first. the timestamps come f
 <!-- MERGED_HISTORY_START -->
 | Merged at (UTC) | PR | Repository | Time to merge |
 |:--|:--|:--|--:|
+| 27 Nov 2026, 13:41 UTC | [fix(faiss): keep searching when filters drop the first candidates](https://github.com/deepset-ai/haystack-core-integrations/pull/4323) | deepset-ai/haystack-core-integrations | 3.2 days |
 | 24 Nov 2026, 08:30 UTC | [fix(sqlalchemy): keep colons in SQL string literals literal](https://github.com/deepset-ai/haystack-core-integrations/pull/4279) | deepset-ai/haystack-core-integrations | 7.7 days |
 | 16 Nov 2026, 12:35 UTC | [fix: convert common Python types in Agent tool results to JSON](https://github.com/deepset-ai/haystack/pull/13728) | deepset-ai/haystack | 3.5 days |
 | 16 Nov 2026, 10:03 UTC | [Report the reducer in unified TS.MRANGE/MREVRANGE metadata on RESP2 with GROUPBY](https://github.com/redis/redis-py/pull/4634) | redis/redis-py | 3.6 days |
@@ -65,13 +66,13 @@ this is the complete upstream merge history, newest first. the timestamps come f
 <!-- LIVE_PRS_START -->
 | Opened | Pull request | Repo | Status |
 |:--|:--|:--|:--|
+| 2026-11-27 | [fix: Qdrant - match no documents for an empty `in` filter](https://github.com/deepset-ai/haystack-core-integrations/pull/4346) | deepset-ai/haystack-core-integrations | open |
 | 2026-11-25 | [fix: keep the text of tables nested in DOCX table cells](https://github.com/deepset-ai/haystack/pull/13906) | deepset-ai/haystack | closed |
-| 2026-11-24 | [fix(faiss): keep searching when filters drop the first candidates](https://github.com/deepset-ai/haystack-core-integrations/pull/4323) | deepset-ai/haystack-core-integrations | open |
+| 2026-11-24 | [fix(faiss): keep searching when filters drop the first candidates](https://github.com/deepset-ai/haystack-core-integrations/pull/4323) | deepset-ai/haystack-core-integrations | merged |
 | 2026-11-16 | [fix(sqlalchemy): keep colons in SQL string literals literal](https://github.com/deepset-ai/haystack-core-integrations/pull/4279) | deepset-ai/haystack-core-integrations | merged |
 | 2026-11-13 | [fix: convert common Python types in Agent tool results to JSON](https://github.com/deepset-ai/haystack/pull/13728) | deepset-ai/haystack | merged |
 | 2026-11-12 | [Support `@logfire.instrument` above `@classmethod` and `@staticmethod`](https://github.com/pydantic/logfire/pull/2807) | pydantic/logfire | closed |
 | 2026-11-12 | [Report the reducer in unified TS.MRANGE/MREVRANGE metadata on RESP2 with GROUPBY](https://github.com/redis/redis-py/pull/4634) | redis/redis-py | merged |
-| 2026-11-12 | [fix: pass the content type to the deserializer in LocalEndpoint.invoke](https://github.com/aws/sagemaker-python-sdk/pull/6579) | aws/sagemaker-python-sdk | open |
 <!-- LIVE_PRS_END -->
 
 [all pull requests](https://github.com/pulls?q=is%3Apr+author%3Aastroknot-sheep) · [merged upstream](https://github.com/pulls?q=is%3Apr+is%3Amerged+author%3Aastroknot-sheep) · [still open](https://github.com/pulls?q=is%3Apr+is%3Aopen+author%3Aastroknot-sheep)
